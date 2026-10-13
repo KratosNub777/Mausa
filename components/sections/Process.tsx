@@ -21,7 +21,7 @@ export function Process({ from, n }: SectionSlot) {
 
   return (
     <Section id="proceso" tone="dark" from={from} labelledBy="proceso-titulo">
-      <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+      <Container className="grid gap-8 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-[calc(var(--header-h)+3rem)]">
             <SectionHeader id="proceso-titulo" n={n} tone="dark" eyebrow={t.eyebrow} lines={t.titulo} intro={t.intro} />
@@ -66,7 +66,7 @@ export function Process({ from, n }: SectionSlot) {
                 />
               </span>
               <m.div
-                className="mb-6 border-b border-beige/10 pb-6 sm:mb-9 sm:pb-9 [li:last-child_&]:mb-0 [li:last-child_&]:border-0 [li:last-child_&]:pb-0"
+                className="mb-5 border-b border-beige/10 pb-5 sm:mb-9 sm:pb-9 [li:last-child_&]:mb-0 [li:last-child_&]:border-0 [li:last-child_&]:pb-0"
                 variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
                 transition={{ duration: 0.75, ease: EASE }}
               >
@@ -74,7 +74,7 @@ export function Process({ from, n }: SectionSlot) {
                   PASO {String(i + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-1.5 font-serif text-h3">{paso.titulo}</h3>
-                <p className="mt-2 max-w-[30rem] text-humo">{paso.texto}</p>
+                <p className="mt-1.5 max-w-[30rem] text-[0.95rem] leading-relaxed text-humo sm:mt-2 sm:text-base">{paso.texto}</p>
               </m.div>
             </m.li>
           ))}

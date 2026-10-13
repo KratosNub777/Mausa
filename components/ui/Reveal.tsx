@@ -17,14 +17,14 @@ type RevealProps = {
 };
 
 /** Fundido + leve desplazamiento hacia arriba. */
-export function Reveal({ children, className, delay = 0, y = 28 }: RevealProps) {
+export function Reveal({ children, className, delay = 0, y = 16 }: RevealProps) {
   return (
     <m.div
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VIEWPORT}
-      transition={{ duration: 0.9, ease: EASE, delay }}
+      transition={{ duration: 0.8, ease: EASE, delay }}
     >
       {children}
     </m.div>
@@ -34,11 +34,11 @@ export function Reveal({ children, className, delay = 0, y = 28 }: RevealProps) 
 /** Contenedor que escalona la aparición de sus RevealItem. */
 const group: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
 const item: Variants = {
-  hidden: { opacity: 0, y: 26 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.85, ease: EASE } },
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: EASE } },
 };
 
 export function RevealGroup({
@@ -103,7 +103,7 @@ export function MaskHeading({
               className="inline-block text-balance"
               variants={{
                 hidden: { y: "108%" },
-                show: { y: "0%", transition: { duration: 1, ease: EASE } },
+                show: { y: "0%", transition: { duration: 0.9, ease: EASE } },
               }}
             >
               {line}
@@ -126,13 +126,13 @@ export function ImageReveal({
   delay?: number;
 }) {
   return (
-    <div className={`overflow-hidden ${className ?? ""}`}>
+    <div className={`relative overflow-hidden ${className ?? ""}`}>
       <m.div
         className="h-full w-full"
-        initial={{ opacity: 0, scale: 1.1, y: 24 }}
-        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 1.05 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={VIEWPORT}
-        transition={{ duration: 1.3, ease: EASE, delay }}
+        transition={{ duration: 1.1, ease: EASE, delay }}
       >
         {children}
       </m.div>

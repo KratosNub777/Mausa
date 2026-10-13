@@ -6,31 +6,47 @@ import * as m from "motion/react-m";
 import { linkWhatsApp } from "@/content/site";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 
-/* Botón flotante de WhatsApp: visible en celular y tablet (en escritorio
-   el header ya tiene el botón). Se oculta mientras el formulario de
-   presupuesto está en pantalla, para no taparlo (ahí ya hay un botón de WhatsApp). */
+/* Botón flotante de WhatsApp (celular y tablet; en computadora ya está en el header).
+   Aparece recién después del hero, y se oculta sobre el formulario y el contacto,
+   que ya tienen sus propios botones: así nunca tapa otro botón. */
 export function WhatsAppFloat() {
-  const [ocultar, setOcultar] = useState(false);
+  const [pasoHero, setPasoHero] = useState(false);
+  const [tapa, setTapa] = useState(false);
 
   useEffect(() => {
-    const form = document.querySelector("#presupuesto form");
-    if (!form) return;
-    const io = new IntersectionObserver(([e]) => setOcultar(e.isIntersecting), {
-      rootMargin: "0px 0px -10% 0px",
+    const hero = document.getElementById("inicio");
+    const zonas = [document.getElementById("presupuesto"), document.getElementById("contacto")].filter(
+      (e): e is HTMLElement => !!e,
+    );
+    const visibles = new Set<Element>();
+
+    const ioHero = new IntersectionObserver(([e]) => setPasoHero(!e.isIntersecting), {
+      rootMargin: "0px 0px -40% 0px",
     });
-    io.observe(form);
-    return () => io.disconnect();
+    const ioZonas = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => (e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target)));
+        setTapa(visibles.size > 0);
+      },
+      { rootMargin: "0px 0px -15% 0px" },
+    );
+    if (hero) ioHero.observe(hero);
+    zonas.forEach((z) => ioZonas.observe(z));
+    return () => {
+      ioHero.disconnect();
+      ioZonas.disconnect();
+    };
   }, []);
 
   return (
     <AnimatePresence>
-      {!ocultar && (
+      {pasoHero && !tapa && (
         <m.a
           href={linkWhatsApp()}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Escribinos por WhatsApp"
-          className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid size-14 place-items-center rounded-full bg-negro text-beige shadow-[0_14px_30px_-10px_rgb(15_14_13/0.6)] ring-1 ring-beige/20 lg:hidden"
+          className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 grid size-14 place-items-center rounded-full bg-negro text-beige shadow-[0_14px_30px_-10px_rgb(15_14_13/0.6)] ring-1 ring-beige/20 lg:hidden"
           initial={{ scale: 0.6, opacity: 0 }}
           animate={{ scale: 1, opacity: 1, transition: { type: "spring", stiffness: 260, damping: 20 } }}
           exit={{ scale: 0.6, opacity: 0, transition: { duration: 0.2 } }}

@@ -5,7 +5,7 @@ export function Logo({ className = "" }: { className?: string }) {
       <span className="font-serif text-[1.9rem] tracking-[-0.01em]">
         Mausa<span className="text-bronce">.</span>
       </span>
-      <span className="text-[0.62rem] font-semibold uppercase tracking-[0.32em] opacity-80">
+      <span className="text-[0.75rem] font-semibold uppercase tracking-[0.26em] opacity-85">
         Mobiliarios
       </span>
     </span>

@@ -7,15 +7,15 @@ import { linkWhatsApp } from "@/content/site";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 
 /* Botón flotante de WhatsApp (celular y tablet; en computadora ya está en el header).
-   Aparece recién después del hero, y se oculta sobre el formulario y el contacto,
-   que ya tienen sus propios botones: así nunca tapa otro botón. */
+   Aparece recién después del hero, y se oculta sobre la galería, el formulario y
+   el contacto (zonas con botones propios): así nunca tapa otro botón. */
 export function WhatsAppFloat() {
   const [pasoHero, setPasoHero] = useState(false);
   const [tapa, setTapa] = useState(false);
 
   useEffect(() => {
     const hero = document.getElementById("inicio");
-    const zonas = [document.getElementById("presupuesto"), document.getElementById("contacto")].filter(
+    const zonas = ["trabajos", "presupuesto", "contacto"].map((id) => document.getElementById(id)).filter(
       (e): e is HTMLElement => !!e,
     );
     const visibles = new Set<Element>();

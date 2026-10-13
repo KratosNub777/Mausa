@@ -148,14 +148,8 @@ export const textos = {
   testimonios: {
     eyebrow: "Testimonios",
     titulo: ["Lo que dicen", "nuestros clientes"],
-    intro: "Muy pronto vas a leer acá las experiencias de quienes ya confiaron en nosotros.",
-    /* MARCADORES: reemplazá cada uno por un testimonio real (con permiso del cliente)
-       y cambiá `marcador` a false. No inventes opiniones. */
-    items: [
-      { marcador: true, texto: "", nombre: "", espacio: "Cocina" },
-      { marcador: true, texto: "", nombre: "", espacio: "Oficina" },
-      { marcador: true, texto: "", nombre: "", espacio: "Placard" },
-    ],
+    intro: "Experiencias de quienes ya confiaron en nosotros.",
+    // Las opiniones se cargan en content/testimonios.ts
   },
 
   presupuesto: {

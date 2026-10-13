@@ -4,6 +4,7 @@ import { MaskHeading, Reveal } from "./Reveal";
 /* Encabezado estándar de sección: etiqueta + título con máscara + bajada. */
 export function SectionHeader({
   id,
+  n,
   eyebrow,
   lines,
   intro,
@@ -11,6 +12,7 @@ export function SectionHeader({
   className = "",
 }: {
   id: string;
+  n?: string;
   eyebrow: string;
   lines: readonly string[];
   intro?: string;
@@ -20,12 +22,18 @@ export function SectionHeader({
   return (
     <div className={className}>
       <Reveal>
-        <Eyebrow className={tone === "dark" ? "text-bronce" : "text-tinta"}>{eyebrow}</Eyebrow>
+        <Eyebrow n={n} className={tone === "dark" ? "text-bronce" : "text-tinta"}>
+          {eyebrow}
+        </Eyebrow>
       </Reveal>
-      <MaskHeading id={id} lines={lines} className="mt-6 font-serif text-h2 font-light" />
+      <MaskHeading
+        id={id}
+        lines={lines}
+        className={`mt-5 font-serif text-h2 ${tone === "dark" ? "glow-titulo" : ""}`}
+      />
       {intro && (
         <Reveal delay={0.15}>
-          <p className={`mt-7 max-w-[36rem] text-lead ${tone === "dark" ? "text-humo" : "text-tinta"}`}>
+          <p className={`mt-6 max-w-[36rem] text-lead ${tone === "dark" ? "text-humo" : "text-tinta"}`}>
             {intro}
           </p>
         </Reveal>

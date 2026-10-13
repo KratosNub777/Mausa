@@ -88,17 +88,11 @@ export function Work({ from, n }: SectionSlot) {
                     activo ? "text-beige" : "text-negro can-hover:hover:bg-negro/5"
                   } ${separado ? "sm:ml-2" : ""}`}
                 >
-                  {activo && (
-                    <m.span
-                      layoutId="filtro-activo"
-                      aria-hidden
-                      className="absolute inset-0 rounded-full bg-negro"
-                      transition={{ type: "spring", stiffness: 380, damping: 34 }}
-                    />
-                  )}
                   <span
                     aria-hidden
-                    className={`absolute inset-0 rounded-full border ${activo ? "border-transparent" : separado ? "border-dashed border-bronce" : "border-negro/20"}`}
+                    className={`absolute inset-0 rounded-full border transition-[background-color,border-color] duration-300 ${
+                      activo ? "border-negro bg-negro" : separado ? "border-dashed border-bronce" : "border-negro/20"
+                    }`}
                   />
                   <span className="relative">{f.label}</span>
                   <span className={`relative text-xs tabular-nums ${activo ? "text-beige/75" : "text-tinta"}`}>

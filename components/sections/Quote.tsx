@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
-import { Container, Section } from "@/components/ui/Section";
+import { Container, Section, type SectionSlot } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { Magnetic } from "@/components/ui/Magnetic";
@@ -15,7 +15,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 /* Formulario que NO usa servidor: arma el texto y abre WhatsApp
    (wa.me) con el mensaje ya escrito, listo para enviar. */
-export function Quote() {
+export function Quote({ from, n }: SectionSlot) {
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState("");
 
@@ -55,10 +55,10 @@ export function Quote() {
   const label = "text-sm font-semibold";
 
   return (
-    <Section id="presupuesto" tone="light" labelledBy="presupuesto-titulo">
-      <Container className="grid gap-14 py-[clamp(4.5rem,10vw,9rem)] lg:grid-cols-12 lg:gap-10">
+    <Section id="presupuesto" tone="light" from={from} labelledBy="presupuesto-titulo">
+      <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
-          <SectionHeader id="presupuesto-titulo" tone="light" eyebrow={t.eyebrow} lines={t.titulo} intro={t.intro} />
+          <SectionHeader id="presupuesto-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} intro={t.intro} />
 
           <RevealGroup as="ol" className="mt-10 space-y-4">
             {t.pasos.map((p, i) => (
@@ -139,17 +139,20 @@ export function Quote() {
               {error && <p className="font-semibold text-[#8a2c1d]">{error}</p>}
             </div>
 
-            <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <Magnetic className="w-full sm:w-auto">
+            <div className="mt-2 flex flex-col items-stretch gap-4 border-t border-negro/10 pt-6 sm:flex-row sm:items-center sm:gap-6">
+              <Magnetic className="w-full shrink-0 sm:w-auto">
                 <button
                   type="submit"
-                  className="inline-flex min-h-14 w-full items-center justify-center gap-2.5 rounded-full bg-negro px-8 font-semibold text-beige transition-colors duration-300 hover:bg-negro-suave sm:w-auto"
+                  className="inline-flex min-h-14 w-full min-w-[16rem] items-center justify-center gap-2.5 rounded-full bg-negro px-8 font-semibold whitespace-nowrap text-beige transition-colors duration-300 hover:bg-negro-suave sm:w-auto"
                 >
-                  <WhatsAppIcon className="size-5" />
+                  <WhatsAppIcon className="size-5 shrink-0" />
                   Enviar por WhatsApp
                 </button>
               </Magnetic>
-              <p className="text-xs text-tinta">Sin compromiso. Te respondemos por WhatsApp.</p>
+              <p className="text-center text-sm leading-snug text-tinta sm:text-left">
+                Sin compromiso.
+                <br className="hidden sm:block" /> Te respondemos por WhatsApp.
+              </p>
             </div>
 
             {/* Confirmación de la acción */}

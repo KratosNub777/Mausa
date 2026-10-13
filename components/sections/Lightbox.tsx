@@ -145,7 +145,7 @@ export function Lightbox({
       {/* Pie: título y navegación */}
       <div className="flex items-center justify-between gap-4 px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-8">
         <div className="min-w-0">
-          <p className="text-[0.68rem] font-semibold tracking-[0.2em] text-humo uppercase">
+          <p className="text-xs font-semibold tracking-[0.18em] text-humo uppercase">
             {nombreEspacio[foto.espacio]}
             {foto.render && " · Diseño 3D"}
           </p>

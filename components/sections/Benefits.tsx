@@ -13,29 +13,28 @@ export function Benefits({ from, n }: SectionSlot) {
   return (
     <Section id="ventajas" tone="light" from={from} labelledBy="ventajas-titulo">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
-            <SectionHeader id="ventajas-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} />
-            <ImageReveal className="mt-10 hidden rounded-[1.5rem] md:block">
-              <Parallax amount={6} className="aspect-[16/10] bg-arena lg:aspect-[4/5]">
-                <Image
-                  src="/trabajos/cocinas/cajon-organizador.jpg"
-                  alt="Detalle de cajón de cocina abierto con organizador de cubiertos, hecho a medida"
-                  fill
-                  sizes="(min-width: 1024px) 38vw, 90vw"
-                  className="object-cover object-[40%_55%]"
-                />
-              </Parallax>
-            </ImageReveal>
-          </div>
+        <SectionHeader id="ventajas-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} />
 
-          <div className="min-w-0 lg:col-span-7 lg:self-end">
+        <div className="mt-10 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:items-stretch lg:gap-6">
+          <ImageReveal className="hidden rounded-[1.5rem] md:block lg:col-span-5">
+            <Parallax amount={6} className="aspect-[16/10] h-full bg-arena lg:aspect-auto lg:min-h-[26rem]">
+              <Image
+                src="/trabajos/cocinas/cajon-organizador.jpg"
+                alt="Detalle de cajón de cocina abierto con organizador de cubiertos, hecho a medida"
+                fill
+                sizes="(min-width: 1024px) 38vw, 90vw"
+                className="object-cover object-[40%_55%]"
+              />
+            </Parallax>
+          </ImageReveal>
+
+          <div className="min-w-0 lg:col-span-7">
             <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-tinta uppercase sm:hidden" aria-hidden>
               Deslizá para ver más →
             </p>
             <RevealGroup
               as="ul"
-              className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden"
+              className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:h-full sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-6 [&::-webkit-scrollbar]:hidden"
             >
               {t.items.map((item, i) => (
                 <RevealItem
@@ -48,7 +47,7 @@ export function Benefits({ from, n }: SectionSlot) {
                       <span className="font-serif text-2xl text-tinta tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                       <span aria-hidden className="h-px flex-1 bg-bronce/50" />
                     </div>
-                    <h3 className="mt-5 font-serif text-h3">{item.titulo}</h3>
+                    <h3 className="mt-5 font-serif text-h3 sm:mt-auto sm:pt-8">{item.titulo}</h3>
                     <p className="mt-2 text-[0.95rem] leading-relaxed text-tinta">{item.texto}</p>
                   </div>
                 </RevealItem>

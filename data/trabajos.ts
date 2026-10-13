@@ -101,20 +101,20 @@ export const trabajos: Trabajo[] = [
     foco: "60% 60%",
   },
   {
-    id: "isla-tonos-oscuros",
-    titulo: "Isla en tonos oscuros",
-    espacio: "cocinas",
-    src: "/trabajos/cocinas/isla-tonos-oscuros.jpg",
-    alt: "Isla de cocina con frentes gris oscuro y mesada de granito claro",
-    foco: "45% 60%",
-  },
-  {
     id: "lineas-modernas",
     titulo: "Líneas modernas y minimalistas",
     espacio: "cocinas",
     src: "/trabajos/cocinas/lineas-modernas.jpg",
     alt: "Barra de cocina con frente gris oscuro y mesada de granito",
     foco: "50% 60%",
+  },
+  {
+    id: "isla-tonos-oscuros",
+    titulo: "Isla en tonos oscuros",
+    espacio: "cocinas",
+    src: "/trabajos/cocinas/isla-tonos-oscuros.jpg",
+    alt: "Isla de cocina con frentes gris oscuro y mesada de granito claro",
+    foco: "45% 60%",
   },
   {
     id: "placard-puertas-cajonera",

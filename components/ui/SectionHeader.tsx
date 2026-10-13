@@ -22,7 +22,7 @@ export function SectionHeader({
   return (
     <div className={className}>
       <Reveal>
-        <Eyebrow n={n} className={tone === "dark" ? "text-bronce" : "text-tinta"}>
+        <Eyebrow n={n} className={tone === "dark" ? "text-bronce-claro" : "text-tinta"}>
           {eyebrow}
         </Eyebrow>
       </Reveal>

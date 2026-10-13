@@ -18,6 +18,7 @@
   --color-negro: #0f0e0d; /* Negro */
   --color-negro-suave: #1c1a18; /* Negro suave */
   --color-bronce: #a98557; /* Acento: solo líneas y detalles */
+  --color-bronce-claro: #c29a63; /* Bronce para textos chicos sobre fondo oscuro (AA) */
   /* Textos secundarios (calculados para contraste AA) */
   --color-tinta: #5c5347; /* sobre fondos beige (≥ 5:1) */
   --color-humo: #a39782; /* sobre fondos negros (≥ 6:1) */
@@ -93,8 +94,8 @@ body {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(55% 40% at 10% 32%, rgb(214 150 72 / 0.1), transparent 70%),
-    radial-gradient(45% 35% at 95% 88%, rgb(214 150 72 / 0.06), transparent 70%);
+    radial-gradient(55% 40% at 10% 32%, rgb(214 150 72 / 0.06), transparent 70%),
+    radial-gradient(45% 35% at 95% 88%, rgb(214 150 72 / 0.04), transparent 70%);
 }
 
 /* Resplandor cálido detrás de los títulos en secciones oscuras */
@@ -110,7 +111,7 @@ body {
   height: 170%;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(closest-side, rgb(214 150 72 / 0.16), transparent);
+  background: radial-gradient(closest-side, rgb(214 150 72 / 0.08), transparent);
 }
 
 /* ---------- Grano: textura de material sobre todo el sitio ---------- */

@@ -70,7 +70,7 @@ export function Process({ from, n }: SectionSlot) {
                 variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
                 transition={{ duration: 0.75, ease: EASE }}
               >
-                <p className="text-xs font-semibold tracking-[0.22em] text-bronce">
+                <p className="text-xs font-semibold tracking-[0.22em] text-bronce-claro">
                   PASO {String(i + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-1.5 font-serif text-h3">{paso.titulo}</h3>

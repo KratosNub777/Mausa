@@ -18,6 +18,7 @@
   --color-negro: #0f0e0d; /* Negro */
   --color-negro-suave: #1c1a18; /* Negro suave */
   --color-bronce: #a98557; /* Acento: solo líneas y detalles */
+  --color-bronce-claro: #c29a63; /* Bronce para textos chicos sobre fondo oscuro (AA) */
   /* Textos secundarios (calculados para contraste AA) */
   --color-tinta: #5c5347; /* sobre fondos beige (≥ 5:1) */
   --color-humo: #a39782; /* sobre fondos negros (≥ 6:1) */
@@ -27,7 +28,7 @@
   --font-sans: var(--font-manrope), system-ui, sans-serif;
 
   /* Escala tipográfica fluida: crece con el ancho de pantalla */
-  --text-display: clamp(4.1rem, 2.4rem + 7vw, 10rem);
+  --text-display: clamp(4.1rem, 2.6rem + 6vw, 8.75rem);
   --text-display--line-height: 0.94;
   --text-display--letter-spacing: -0.02em;
   --text-h2: clamp(2.6rem, 1.7rem + 4vw, 5.75rem);
@@ -47,6 +48,8 @@
 
 :root {
   --header-h: 4.5rem;
+  /* Ritmo vertical de las secciones: 64px en celular → ~110px en computadora */
+  --section-y: clamp(4rem, 2.4rem + 5vw, 7rem);
   --focus: var(--color-negro);
 }
 
@@ -82,43 +85,33 @@ body {
 .bg-tone-light {
   background: linear-gradient(180deg, var(--color-beige) 0%, var(--color-arena) 100%);
 }
-.bg-tone-dark {
-  background: linear-gradient(180deg, var(--color-negro-suave) 0%, var(--color-negro) 100%);
+
+/* Resplandor ámbar muy sutil en secciones oscuras (como la luz LED de los muebles) */
+.glow-ambar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 40% at 10% 32%, rgb(214 150 72 / 0.06), transparent 70%),
+    radial-gradient(45% 35% at 95% 88%, rgb(214 150 72 / 0.04), transparent 70%);
 }
 
-/* Franjas de transición entre secciones (curva suave, mezcla calculada en oklab
-   para que el paso de beige a negro no se vea "embarrado") */
-.blend-to-dark {
-  background: linear-gradient(
-    180deg,
-    #e3d4ba 0%,
-    #ddceb5 10%,
-    #ccbea7 20%,
-    #b3a793 30%,
-    #968c7c 40%,
-    #787063 50%,
-    #5a544b 60%,
-    #413d36 70%,
-    #2d2a26 80%,
-    #211e1c 90%,
-    #1c1a18 100%
-  );
+/* Resplandor cálido detrás de los títulos en secciones oscuras */
+.glow-titulo {
+  position: relative;
 }
-.blend-to-light {
-  background: linear-gradient(
-    180deg,
-    #0f0e0d 0%,
-    #141311 10%,
-    #22201e 20%,
-    #383633 30%,
-    #55524d 40%,
-    #76726c 50%,
-    #99958c 60%,
-    #bbb6ab 70%,
-    #d8d1c6 80%,
-    #ece5d8 90%,
-    #f3ecdf 100%
-  );
+.glow-titulo::before {
+  content: "";
+  position: absolute;
+  left: -12%;
+  top: -35%;
+  width: 85%;
+  height: 170%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgb(214 150 72 / 0.08), transparent);
 }
 
 /* ---------- Grano: textura de material sobre todo el sitio ---------- */
@@ -186,9 +179,6 @@ body {
 /* La foto principal no arranca invisible (es el LCP): solo se "asienta" */
 .hero-img {
   animation: settle 1.6s var(--ease-out-expo) both;
-}
-.hero-img-2 {
-  animation: fade-up 1.2s var(--ease-out-expo) 0.7s both;
 }
 @keyframes settle {
   from {

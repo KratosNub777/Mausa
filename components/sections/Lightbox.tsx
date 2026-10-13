@@ -27,6 +27,7 @@ export function Lightbox({
   const ref = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [dir, setDir] = useState(0);
+  const inicioX = useRef<number | null>(null);
   const lenis = useLenis();
   const foto = fotos[index];
   const total = fotos.length;
@@ -122,12 +123,15 @@ export function Lightbox({
             animate="center"
             exit="exit"
             transition={{ duration: 0.5, ease: EASE }}
-            drag={total > 1 ? "x" : false}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.25}
-            onDragEnd={(_, info) => {
-              if (info.offset.x < -70) go(1);
-              else if (info.offset.x > 70) go(-1);
+            style={{ touchAction: "pan-y" }}
+            onPointerDown={(e) => (inicioX.current = e.clientX)}
+            onPointerUp={(e) => {
+              // Deslizar con el dedo: más de 60px cambia de foto
+              if (inicioX.current === null || total < 2) return;
+              const dx = e.clientX - inicioX.current;
+              inicioX.current = null;
+              if (dx < -60) go(1);
+              else if (dx > 60) go(-1);
             }}
           >
             <Image
@@ -145,7 +149,7 @@ export function Lightbox({
       {/* Pie: título y navegación */}
       <div className="flex items-center justify-between gap-4 px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-8">
         <div className="min-w-0">
-          <p className="text-[0.68rem] font-semibold tracking-[0.2em] text-humo uppercase">
+          <p className="text-xs font-semibold tracking-[0.18em] text-humo uppercase">
             {nombreEspacio[foto.espacio]}
             {foto.render && " · Diseño 3D"}
           </p>

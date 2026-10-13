@@ -6,31 +6,35 @@ import { Benefits } from "@/components/sections/Benefits";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Quote } from "@/components/sections/Quote";
 import { Contact } from "@/components/sections/Contact";
-import { Blend } from "@/components/ui/Section";
 import { JsonLd } from "@/components/JsonLd";
+import type { SectionSlot, Tone } from "@/components/ui/Section";
+import { hayTestimonios } from "@/content/testimonios";
 
-/* Orden de la página. Las secciones alternan claro / oscuro
-   y <Blend> funde los colores entre una y otra. */
+type Bloque = { key: string; tone: Tone; Comp: (p: SectionSlot) => React.ReactNode };
+
+/* Orden de la página. Cada sección recibe el tono de la anterior
+   (para fundir los colores sin cortes) y su número (01, 02…).
+   Testimonios aparece solo cuando hay opiniones reales (content/testimonios.ts). */
+const bloques: Bloque[] = [
+  { key: "nosotros", tone: "dark", Comp: About },
+  { key: "trabajos", tone: "light", Comp: Work },
+  { key: "proceso", tone: "dark", Comp: Process },
+  { key: "ventajas", tone: "light", Comp: Benefits },
+  ...(hayTestimonios ? [{ key: "testimonios", tone: "dark" as Tone, Comp: Testimonials }] : []),
+  { key: "presupuesto", tone: "light", Comp: Quote },
+];
+
 export default function Home() {
+  const ultimo = bloques[bloques.length - 1].tone;
   return (
     <>
       <main id="contenido">
         <Hero />
-        <Blend from="light" to="dark" />
-        <About />
-        <Blend from="dark" to="light" />
-        <Work />
-        <Blend from="light" to="dark" />
-        <Process />
-        <Blend from="dark" to="light" />
-        <Benefits />
-        <Blend from="light" to="dark" />
-        <Testimonials />
-        <Blend from="dark" to="light" />
-        <Quote />
-        <Blend from="light" to="dark" />
+        {bloques.map(({ key, Comp }, i) => (
+          <Comp key={key} from={i === 0 ? "light" : bloques[i - 1].tone} n={String(i + 1).padStart(2, "0")} />
+        ))}
       </main>
-      <Contact />
+      <Contact from={ultimo} n={String(bloques.length + 1).padStart(2, "0")} />
       <JsonLd />
     </>
   );

@@ -110,7 +110,7 @@ export function Header() {
         }`}
         style={{ "--focus": dark ? "var(--color-beige)" : "var(--color-negro)" } as React.CSSProperties}
       >
-        <a href="#inicio" onClick={(e) => go(e, "#inicio")} aria-label="Mausa Mobiliarios, ir al inicio" className="rounded-md">
+        <a href="#inicio" onClick={(e) => go(e, "#inicio")} aria-label="Mausa Mobiliarios, ir al inicio" className="inline-flex min-h-11 items-center rounded-md">
           <Logo />
         </a>
 

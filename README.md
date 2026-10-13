@@ -28,6 +28,7 @@ npm start        # sirve la versión compilada
 | Qué querés cambiar | Archivo |
 | --- | --- |
 | Textos de todas las secciones, teléfonos, email, redes, mapa | `content/site.ts` |
+| Opiniones de clientes (y mostrar u ocultar la sección) | `content/testimonios.ts` |
 | Fotos de la galería (título, espacio, descripción) | `data/trabajos.ts` |
 | Colores, tamaños de letra y animaciones de fondo | `app/globals.css` (bloque `@theme`) |
 | Título y descripción para Google / redes | `content/site.ts` → `seo` |
@@ -47,21 +48,24 @@ npm start        # sirve la versión compilada
      espacio: "cocinas",
      src: "/trabajos/cocinas/cocina-blanca.jpg",
      alt: "Cocina blanca con isla y banquetas", // describe la foto (accesibilidad)
-     formato: "horizontal", // "vertical" | "horizontal" | "grande" | "cuadrado"
+     foco: "50% 60%", // opcional: qué parte conservar al recortar
    },
    ```
 
-3. El orden de la lista es el orden de la galería. Las primeras 11 se ven de entrada; el resto aparece con "Ver todos los trabajos".
-4. Cuando tengas fotos de la categoría **Otros**, borrá el bloque marcado `marcador: true`.
+3. El orden de la lista es el orden de la galería: poné primero las fotos más nítidas y luminosas. Las primeras 8 se ven de entrada; el resto aparece con "Ver todos los trabajos".
+4. La cuadrícula alterna sola una foto grande (16:10) y verticales (4:5); no hace falta indicar tamaños.
+5. Los filtros sin fotos se ocultan solos (por ejemplo **Otros**, hasta que cargues una).
+6. Si la imagen es un diseño 3D y no una obra terminada, agregá `render: true`: va al filtro **Diseños 3D** y no se mezcla con las fotos reales.
 
 No hace falta achicar las fotos: Next.js las optimiza solo (AVIF/WebP y el tamaño justo para cada pantalla). Igual conviene que no pasen de ~2000 px de ancho.
 
 ### Pendientes marcados para completar
 
-- **Testimonios**: en `content/site.ts` → `testimonios.items`. Reemplazá cada marcador por una opinión real (con permiso del cliente) y poné `marcador: false`.
-- **Mapa dentro de la página**: en Google Maps abrí tu ubicación → *Compartir* → *Insertar un mapa* → copiá solo la dirección que está dentro de `src="..."` y pegala en `content/site.ts` → `mapa.embedSrc`. Mientras esté vacío se muestra un botón que abre Google Maps.
+- **Testimonios**: la sección está oculta. Cargá opiniones reales (con permiso del cliente) en `content/testimonios.ts` y cambiá `mostrar` a `true`.
+- **Mapa dentro de la página**: en Google Maps abrí tu ubicación → *Compartir* → *Insertar un mapa* → copiá solo la dirección que está dentro de `src="..."` y pegala en `content/site.ts` → `mapa.embedSrc`. Mientras esté vacío se muestra una tarjeta compacta con el botón "Abrir en Google Maps".
+- **Fotos para reemplazar** (oscuras, poco nítidas o de baja resolución): biblioteca y escritorio, puesto de trabajo en L, integración con electrodomésticos, mueble de recepción, escritorio con cajonera y mueble de cocina compacto. Ideal: con luz de día, celular a la altura del pecho, sin zoom digital y de al menos 1600 px de ancho.
 - **Instalación incluida**: si está incluida en el precio, podés decirlo en `ventajas` (está marcado como `EDITABLE`).
-- La foto "Cocina con isla integrada" es un **diseño 3D**, por eso lleva la etiqueta "Diseño 3D". Si tenés la foto de la obra terminada, reemplazala y borrá `render: true`.
+- La imagen "Cocina con isla integrada" es un **diseño 3D**: aparece solo en el filtro "Diseños 3D". Si tenés la foto de la obra terminada, reemplazala y borrá `render: true`.
 
 ## Publicarlo gratis en Vercel
 

@@ -1,67 +1,59 @@
-"use client";
-
 import Image from "next/image";
-import * as m from "motion/react-m";
-import { Container, Section } from "@/components/ui/Section";
+import { Container, Section, type SectionSlot } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Reveal } from "@/components/ui/Reveal";
+import { ImageReveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { Parallax } from "@/components/ui/Parallax";
 import { textos } from "@/content/site";
 
 const t = textos.ventajas;
-const EASE = [0.16, 1, 0.3, 1] as const;
 
-/* Por qué a medida: 4 ventajas. La línea superior de cada una se dibuja
-   al aparecer para marcar el orden de lectura. */
-export function Benefits() {
+/* Por qué a medida: 4 ventajas.
+   Celular: carrusel horizontal compacto (deslizable). Tablet/computadora: grilla 2×2 junto a la foto. */
+export function Benefits({ from, n }: SectionSlot) {
   return (
-    <Section id="ventajas" tone="light" labelledBy="ventajas-titulo">
-      <Container className="py-[clamp(4.5rem,10vw,9rem)]">
-        <SectionHeader id="ventajas-titulo" tone="light" eyebrow={t.eyebrow} lines={t.titulo} className="max-w-3xl" />
+    <Section id="ventajas" tone="light" from={from} labelledBy="ventajas-titulo">
+      <Container>
+        <SectionHeader id="ventajas-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} />
 
-        <div className="mt-14 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-10">
-          <Reveal y={40} className="lg:col-span-4">
-            <figure>
-              <Parallax amount={7} className="aspect-[4/5] rounded-[1.5rem] bg-arena sm:aspect-[16/11] lg:aspect-[3/4]">
-                <Image
-                  src="/trabajos/cocinas/cajon-organizador.jpg"
-                  alt="Detalle de cajón de cocina abierto con organizador de cubiertos"
-                  fill
-                  sizes="(min-width: 1024px) 30vw, 100vw"
-                  className="object-cover"
-                />
-              </Parallax>
-              <figcaption className="mt-3 text-sm text-tinta">Detalle de un cajón con organizador, hecho a medida.</figcaption>
-            </figure>
-          </Reveal>
+        <div className="mt-10 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:items-stretch lg:gap-6">
+          <ImageReveal className="hidden rounded-[1.5rem] md:block lg:col-span-5">
+            <Parallax amount={6} className="aspect-[16/10] h-full bg-arena lg:aspect-auto lg:min-h-[26rem]">
+              <Image
+                src="/trabajos/cocinas/cajon-organizador.jpg"
+                alt="Detalle de cajón de cocina abierto con organizador de cubiertos, hecho a medida"
+                fill
+                sizes="(min-width: 1024px) 38vw, 90vw"
+                className="object-cover object-[40%_55%]"
+              />
+            </Parallax>
+          </ImageReveal>
 
-          <ul className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:col-span-8 lg:pl-6">
-            {t.items.map((item, i) => (
-              <m.li
-                key={item.titulo}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "0px 0px -15% 0px" }}
-              >
-                <m.span
-                  aria-hidden
-                  className="block h-px origin-left bg-negro/80"
-                  variants={{ hidden: { scaleX: 0 }, show: { scaleX: 1 } }}
-                  transition={{ duration: 1.1, ease: EASE, delay: (i % 2) * 0.12 }}
-                />
-                <m.div
-                  variants={{ hidden: { opacity: 0, y: 22 }, show: { opacity: 1, y: 0 } }}
-                  transition={{ duration: 0.8, ease: EASE, delay: 0.15 + (i % 2) * 0.12 }}
+          <div className="min-w-0 lg:col-span-7">
+            <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-tinta uppercase sm:hidden" aria-hidden>
+              Deslizá para ver más →
+            </p>
+            <RevealGroup
+              as="ul"
+              className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:h-full sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-6 [&::-webkit-scrollbar]:hidden"
+            >
+              {t.items.map((item, i) => (
+                <RevealItem
+                  as="li"
+                  key={item.titulo}
+                  className="w-[78vw] max-w-[20rem] shrink-0 snap-start sm:w-auto sm:max-w-none"
                 >
-                  <p aria-hidden className="mt-6 font-serif text-[2.75rem] leading-none font-light text-beige-profundo">
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="mt-5 font-serif text-h3">{item.titulo}</h3>
-                  <p className="mt-3 text-tinta">{item.texto}</p>
-                </m.div>
-              </m.li>
-            ))}
-          </ul>
+                  <div className="flex h-full flex-col rounded-2xl border border-negro/10 bg-beige/55 p-5 sm:p-7">
+                    <div className="flex items-center gap-3">
+                      <span className="font-serif text-2xl text-tinta tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                      <span aria-hidden className="h-px flex-1 bg-bronce/50" />
+                    </div>
+                    <h3 className="mt-5 font-serif text-h3 sm:mt-auto sm:pt-8">{item.titulo}</h3>
+                    <p className="mt-2 text-[0.95rem] leading-relaxed text-tinta">{item.texto}</p>
+                  </div>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
         </div>
       </Container>
     </Section>

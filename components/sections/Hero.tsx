@@ -93,12 +93,13 @@ export function Hero() {
 
         {/* Foto principal: grande, protagonista */}
         <figure className="hero-img relative lg:col-span-6">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-arena shadow-[0_20px_50px_-30px_rgb(15_14_13/0.35)] lg:aspect-[4/3]">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-arena shadow-[0_20px_50px_-30px_rgb(15_14_13/0.35)]">
             <Image
               src="/trabajos/oficinas/sala-de-reuniones.jpg"
               alt="Sala de reuniones de Mausa con mesa, revestimiento de listones y estantería"
               fill
-              preload
+              loading="eager"
+              fetchPriority="high"
               sizes="(min-width: 1440px) 640px, (min-width: 1024px) 46vw, calc(100vw - 32px)"
               className="object-cover object-[45%_50%]"
             />

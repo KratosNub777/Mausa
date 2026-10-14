@@ -15,8 +15,8 @@ export const siteUrl =
 
 export const contacto = {
   whatsapp: [
-    { etiqueta: "WhatsApp 1", numero: "+595 982 170272", wa: "595982170272" },
-    { etiqueta: "WhatsApp 2", numero: "+595 992 948128", wa: "595992948128" },
+    { etiqueta: "WhatsApp principal", numero: "+595 982 170272", wa: "595982170272" },
+    { etiqueta: "WhatsApp alternativo", numero: "+595 992 948128", wa: "595992948128" },
   ],
   email: "mausamobiliarios@gmail.com",
   instagram: {
@@ -32,6 +32,24 @@ export const contacto = {
     embedSrc: "",
   },
 } as const;
+
+/** Completar únicamente con información confirmada por Mausa.
+ * Los campos vacíos se omiten de la página. */
+export const informacionComercial: {
+  ubicacion: string;
+  cobertura: string;
+  horarios: string;
+  garantia: string;
+  tallerEquipo: string;
+  anioInicio: number | null;
+} = {
+  ubicacion: "",
+  cobertura: "",
+  horarios: "",
+  garantia: "",
+  tallerEquipo: "",
+  anioInicio: null,
+};
 
 /** Arma un link de WhatsApp con el mensaje ya escrito. */
 export function linkWhatsApp(
@@ -77,24 +95,24 @@ export const textos = {
 
   nosotros: {
     eyebrow: "Quiénes somos",
-    titulo: ["Cada mueble,", "pensado para un lugar", "y una persona."],
+    titulo: ["Cada mueble, pensado para un lugar y una persona."],
     parrafos: [
       "En Mausa Mobiliarios diseñamos y fabricamos muebles a medida pensados para adaptarse a cada espacio, cada necesidad y cada estilo de vida.",
       "Combinamos precisión en la fabricación con procesos de trabajo prolijos para transformar ambientes cotidianos en espacios funcionales y con identidad propia. Acompañamos cada proyecto de principio a fin, desde el relevamiento inicial hasta la instalación final.",
     ],
-    dato: { numero: "1", texto: "año de trayectoria", detalle: "Y cada proyecto, de principio a fin." },
+    acompanamiento: "Cada proyecto, de principio a fin.",
   },
 
   trabajos: {
     eyebrow: "Nuestros trabajos",
-    titulo: ["Trabajos", "por espacio"],
+    titulo: ["Trabajos por espacio"],
     intro:
       "Una selección de proyectos reales que diseñamos, fabricamos e instalamos. Tocá cualquier foto para verla en grande.",
   },
 
   proceso: {
     eyebrow: "Cómo trabajamos",
-    titulo: ["De la primera", "charla a la", "instalación."],
+    titulo: ["De la primera charla a la instalación."],
     intro: "Un método claro, pensado para que sepas qué esperar en cada etapa de tu proyecto.",
     pasos: [
       {
@@ -123,7 +141,7 @@ export const textos = {
 
   ventajas: {
     eyebrow: "Por qué a medida",
-    titulo: ["Lo que un mueble", "estándar no te", "puede dar."],
+    titulo: ["Lo que un mueble estándar no te puede dar."],
     items: [
       {
         titulo: "Aprovecha cada centímetro",
@@ -154,9 +172,9 @@ export const textos = {
 
   presupuesto: {
     eyebrow: "Presupuesto",
-    titulo: ["Pedí tu", "presupuesto"],
+    titulo: ["Pedí tu presupuesto"],
     intro:
-      "Contanos qué estás imaginando para tu espacio. Te asesoramos sin compromiso y armamos una propuesta a medida.",
+      "Contanos qué necesitás y preparemos una propuesta a medida.",
     pasos: [
       "Completá el formulario.",
       "Se abre WhatsApp con tu mensaje ya escrito.",
@@ -167,7 +185,7 @@ export const textos = {
 
   contacto: {
     eyebrow: "Hablemos",
-    titulo: ["Hagamos realidad", "tu proyecto"],
+    titulo: ["Hagamos realidad tu proyecto"],
     intro: "Escribinos por el canal que prefieras.",
   },
 } as const;

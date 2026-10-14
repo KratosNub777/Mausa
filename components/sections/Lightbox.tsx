@@ -76,6 +76,15 @@ export function Lightbox({ fotos, index, onIndex, onClose }: {
             {foto.terminaciones && <div className="mt-2"><dt className="font-semibold">Terminaciones</dt><dd className="text-humo">{foto.terminaciones}</dd></div>}
           </dl>}
           {!!foto.caracteristicas?.length && <ul className="mt-2 list-inside list-disc text-sm text-humo">{foto.caracteristicas.map((c) => <li key={c}>{c}</li>)}</ul>}
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <button type="button" onClick={() => {
+              onClose();
+              window.dispatchEvent(new CustomEvent("mausa:select-project", { detail: foto.id }));
+            }} className="inline-flex min-h-11 items-center justify-center rounded-full bg-beige px-5 text-sm font-semibold text-negro hover:bg-arena">
+              Quiero algo similar
+            </button>
+            <p className="text-sm text-humo">Lleva al formulario con este proyecto como referencia.</p>
+          </div>
         </div>
       </div>
     </dialog>, document.body,

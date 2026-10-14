@@ -49,11 +49,16 @@ npm start        # sirve la versión compilada
      src: "/trabajos/cocinas/cocina-blanca.jpg",
      alt: "Cocina blanca con isla y banquetas", // describe la foto (accesibilidad)
      foco: "50% 60%", // opcional: qué parte conservar al recortar
+     // Opcionales: cargar solo si los datos están confirmados.
+     descripcion: "Descripción real del trabajo",
+     materiales: "Materiales confirmados",
+     terminaciones: "Terminaciones confirmadas",
+     caracteristicas: ["Solución confirmada"],
    },
    ```
 
-3. El orden de la lista es el orden de la galería: poné primero las fotos más nítidas y luminosas. Las primeras 8 se ven de entrada; el resto aparece con "Ver todos los trabajos".
-4. La cuadrícula alterna sola una foto grande (16:10) y verticales (4:5); no hace falta indicar tamaños.
+3. El orden de la lista es el orden de la galería: poné primero las fotos más nítidas y luminosas. Las primeras 6 se ven de entrada; "Mostrar más" agrega hasta 6 imágenes por vez y anuncia el total del filtro activo.
+4. La cuadrícula usa proporciones 4:3 estables; el visor muestra cada imagen completa. La primera tarjeta ocupa dos columnas en móvil.
 5. Los filtros sin fotos se ocultan solos (por ejemplo **Otros**, hasta que cargues una).
 6. Si la imagen es un diseño 3D y no una obra terminada, agregá `render: true`: va al filtro **Diseños 3D** y no se mezcla con las fotos reales.
 
@@ -93,5 +98,31 @@ public/marca    logo original de Mausa
 
 ## Accesibilidad y movimiento
 
-- Si el sistema de la persona tiene activado "reducir movimiento", el sitio apaga el scroll suave, el parallax y los desplazamientos (solo quedan fundidos).
+- El contenido aparece desde el primer render. Si el sistema tiene activado "reducir movimiento", se desactivan el scroll suave, el parallax y las animaciones CSS.
 - Se puede recorrer todo con teclado (Tab), con foco visible y enlace "Saltar al contenido".
+
+
+## Presupuestos y datos confirmados
+
+Todos los botones **Pedir presupuesto** llevan al formulario. **Consultar por WhatsApp** abre el contacto principal; el segundo número se presenta como alternativa, sin asignar funciones comerciales no confirmadas.
+
+El formulario prepara un mensaje editable para WhatsApp y permite elegir cualquiera de los dos contactos. **Continuar en WhatsApp** abre el mensaje; el visitante debe enviarlo allí. No hay envío automático ni almacenamiento de consultas en un servidor.
+
+En el visor, **Quiero algo similar** completa el campo editable *Proyecto de referencia*. Conserva nombre, medidas, mensaje y el espacio elegido. Los diseños 3D mantienen esa identificación en la referencia.
+
+En `content/site.ts`, completá `informacionComercial` con ciudad/ubicación, cobertura, horarios, garantía y equipo/taller cuando Mausa los confirme. Los campos vacíos no se publican. `anioInicio` muestra “Desde …” cuando se conoce el año; no se mantiene una antigüedad fija.
+
+## Pruebas de experiencia
+
+La suite verifica anchos de 320, 390, 768, 1024 y 1440 px, navegación, filtros, carga progresiva, foco del visor y menú, formulario y contexto del proyecto. Intercepta `window.open` para comprobar el destino y el mensaje de WhatsApp sin enviar consultas reales.
+
+```bash
+npm ci
+npx playwright install chromium
+npm run build
+npm run test:e2e
+```
+
+Si el entorno ya tiene Chromium, se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/ruta/a/chromium npm run test:e2e`. La suite inicia el servidor compilado o reutiliza uno existente en `localhost:3000`.
+
+El detalle de validación y los datos pendientes están en [docs/entrega-ux.md](docs/entrega-ux.md).

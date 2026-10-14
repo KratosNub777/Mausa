@@ -12,8 +12,7 @@ import { hayTestimonios } from "@/content/testimonios";
 
 type Bloque = { key: string; tone: Tone; Comp: (p: SectionSlot) => React.ReactNode };
 
-/* Orden de la página. Cada sección recibe el tono de la anterior
-   (para fundir los colores sin cortes) y su número (01, 02…).
+/* Orden de la página. Cada sección recibe su número (01, 02…).
    Testimonios aparece solo cuando hay opiniones reales (content/testimonios.ts). */
 const bloques: Bloque[] = [
   { key: "nosotros", tone: "dark", Comp: About },

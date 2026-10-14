@@ -25,6 +25,11 @@ export type Trabajo = {
   alt: string;
   foco?: string;
   render?: boolean;
+  /** Datos confirmados; omitirlos si todavía no están disponibles. */
+  descripcion?: string;
+  materiales?: string;
+  terminaciones?: string;
+  caracteristicas?: string[];
 };
 
 export const filtros: { id: Filtro; label: string }[] = [

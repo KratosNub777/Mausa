@@ -28,7 +28,7 @@ export function WhatsAppFloat() {
         entries.forEach((e) => (e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target)));
         setTapa(visibles.size > 0);
       },
-      { rootMargin: "0px 0px -15% 0px" },
+      { rootMargin: "0px" },
     );
     if (hero) ioHero.observe(hero);
     zonas.forEach((z) => ioZonas.observe(z));
@@ -45,7 +45,9 @@ export function WhatsAppFloat() {
           href={linkWhatsApp()}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Escribinos por WhatsApp"
+          aria-label="Consultar por WhatsApp · contacto principal"
+          title="Consultar por WhatsApp"
+          style={{ "--focus": "var(--color-beige)" } as React.CSSProperties}
           className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 grid size-14 place-items-center rounded-full bg-negro text-beige shadow-[0_14px_30px_-10px_rgb(15_14_13/0.6)] ring-1 ring-beige/20 lg:hidden"
           initial={{ scale: 0.6, opacity: 0 }}
           animate={{ scale: 1, opacity: 1, transition: { type: "spring", stiffness: 260, damping: 20 } }}

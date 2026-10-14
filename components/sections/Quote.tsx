@@ -33,7 +33,7 @@ export function Quote({ from, n }: SectionSlot) {
       setPreparedUrl("");
       setErrors((current) => ({ ...current, espacio: undefined }));
       frame = requestAnimationFrame(() => {
-        if (lenis) { lenis.start(); lenis.scrollTo("#presupuesto", { offset: -88 }); }
+        if (lenis) { lenis.start(); lenis.scrollTo("#presupuesto"); }
         else document.getElementById("presupuesto")?.scrollIntoView();
         history.replaceState(null, "", "#presupuesto");
         projectRef.current?.focus({ preventScroll: true });

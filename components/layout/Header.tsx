@@ -46,7 +46,7 @@ export function Header() {
     e.preventDefault();
     setOpen(false);
     requestAnimationFrame(() => {
-      if (lenis) { lenis.start(); lenis.scrollTo(href, { offset: -88 }); }
+      if (lenis) { lenis.start(); lenis.scrollTo(href); }
       else document.querySelector(href)?.scrollIntoView();
       history.replaceState(null, "", href);
     });

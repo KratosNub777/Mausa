@@ -16,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <LazyMotion features={cargarAnimaciones} strict>
       <MotionConfig reducedMotion="user">
-        {!reduce && <ReactLenis root options={{ lerp: 0.11, anchors: { offset: -88 }, autoRaf: true }} />}
+        {!reduce && <ReactLenis root options={{ lerp: 0.11, anchors: true, autoRaf: true }} />}
         {children}
       </MotionConfig>
     </LazyMotion>

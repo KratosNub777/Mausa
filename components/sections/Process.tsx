@@ -46,7 +46,7 @@ export function Process({ from, n }: SectionSlot) {
             <m.li
               key={paso.titulo}
               className="relative grid grid-cols-[2.2rem_1fr] gap-4 sm:grid-cols-[2.8rem_1fr] sm:gap-8"
-              initial="hidden"
+              initial="show"
               whileInView="show"
               viewport={{ once: true, margin: "0px 0px -30% 0px" }}
             >

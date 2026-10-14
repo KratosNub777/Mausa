@@ -12,9 +12,14 @@ import {
   PinIcon,
   WhatsAppIcon,
 } from "@/components/ui/Icons";
-import { contacto, linkWhatsApp, textos } from "@/content/site";
+import { contacto, informacionComercial, linkWhatsApp, textos } from "@/content/site";
 
 const t = textos.contacto;
+const datosComerciales = [
+  { label: "Zona de cobertura", valor: informacionComercial.cobertura },
+  { label: "Horarios de atención", valor: informacionComercial.horarios },
+  { label: "Garantía", valor: informacionComercial.garantia },
+].filter((dato) => dato.valor.trim());
 
 const canales = [
   ...contacto.whatsapp.map((w) => ({
@@ -39,10 +44,16 @@ export function Contact({ from, n }: SectionSlot) {
             <Reveal delay={0.2} className="mt-8">
               <Magnetic>
                 <ButtonLink href={linkWhatsApp()} external variant="light" icon="whatsapp" className="px-7">
-                  Escribinos por WhatsApp
+                  Consultar por WhatsApp
                 </ButtonLink>
               </Magnetic>
             </Reveal>
+            {datosComerciales.length > 0 && <dl className="mt-6 space-y-4 text-sm">
+              {datosComerciales.map((dato) => <div key={dato.label}>
+                <dt className="font-semibold text-beige">{dato.label}</dt>
+                <dd className="mt-1 leading-relaxed text-humo">{dato.valor}</dd>
+              </div>)}
+            </dl>}
           </div>
 
           <RevealGroup as="ul" className="grid border-t border-beige/10 sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
@@ -84,6 +95,7 @@ export function Contact({ from, n }: SectionSlot) {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-xs font-semibold tracking-[0.18em] text-humo uppercase">Ubicación</span>
+                    <p className="mt-2 text-sm">{informacionComercial.ubicacion || "Paraguay"}</p>
                     <a
                       href={contacto.mapa.url}
                       target="_blank"

@@ -8,14 +8,14 @@ import { textos } from "@/content/site";
 const t = textos.ventajas;
 
 /* Por qué a medida: 4 ventajas.
-   Celular: carrusel horizontal compacto (deslizable). Tablet/computadora: grilla 2×2 junto a la foto. */
+   Celular: lista vertical. Tablet/computadora: grilla 2×2 junto a la foto. */
 export function Benefits({ from, n }: SectionSlot) {
   return (
     <Section id="ventajas" tone="light" from={from} labelledBy="ventajas-titulo">
       <Container>
         <SectionHeader id="ventajas-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} />
 
-        <div className="mt-10 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:items-stretch lg:gap-6">
+        <div className="mt-6 grid gap-6 lg:mt-8 lg:grid-cols-12 lg:items-stretch">
           <ImageReveal className="hidden rounded-[1.5rem] md:block lg:col-span-5">
             <Parallax amount={6} className="aspect-[16/10] h-full bg-arena lg:aspect-auto lg:min-h-[26rem]">
               <Image
@@ -29,25 +29,22 @@ export function Benefits({ from, n }: SectionSlot) {
           </ImageReveal>
 
           <div className="min-w-0 lg:col-span-7">
-            <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-tinta uppercase sm:hidden" aria-hidden>
-              Deslizá para ver más →
-            </p>
             <RevealGroup
               as="ul"
-              className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:h-full sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-6 [&::-webkit-scrollbar]:hidden"
+              className="grid gap-3 sm:h-full sm:grid-cols-2 sm:gap-4 lg:gap-6"
             >
               {t.items.map((item, i) => (
                 <RevealItem
                   as="li"
                   key={item.titulo}
-                  className="w-[78vw] max-w-[20rem] shrink-0 snap-start sm:w-auto sm:max-w-none"
+                  className="min-w-0"
                 >
                   <div className="flex h-full flex-col rounded-2xl border border-negro/10 bg-beige/55 p-5 sm:p-7">
                     <div className="flex items-center gap-3">
                       <span className="font-serif text-2xl text-tinta tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                       <span aria-hidden className="h-px flex-1 bg-bronce/50" />
                     </div>
-                    <h3 className="mt-5 font-serif text-h3 sm:mt-auto sm:pt-8">{item.titulo}</h3>
+                    <h3 className="mt-2 font-serif text-h3 sm:mt-auto sm:pt-6">{item.titulo}</h3>
                     <p className="mt-2 text-[0.95rem] leading-relaxed text-tinta">{item.texto}</p>
                   </div>
                 </RevealItem>

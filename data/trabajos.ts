@@ -4,8 +4,7 @@
    1. Copiá la imagen (.jpg) en public/trabajos/<espacio>/
    2. Agregá un bloque nuevo en la lista de abajo.
    El orden de la lista es el orden de la galería: poné primero las fotos
-   más nítidas y luminosas. La cuadrícula alterna sola fotos grandes (16:10)
-   y verticales (4:5), así que no hace falta indicar el tamaño.
+   más nítidas y luminosas. La cuadrícula usa fotos 4:3; el visor las muestra completas.
    Espacios válidos: "cocinas" | "oficinas" | "salones" | "placares" | "otros"
    foco (opcional): qué parte de la foto conservar al recortar,
      en "horizontal vertical" (ej: "50% 70%" = centro, más abajo).
@@ -25,6 +24,11 @@ export type Trabajo = {
   alt: string;
   foco?: string;
   render?: boolean;
+  /** Datos confirmados; omitirlos si todavía no están disponibles. */
+  descripcion?: string;
+  materiales?: string;
+  terminaciones?: string;
+  caracteristicas?: string[];
 };
 
 export const filtros: { id: Filtro; label: string }[] = [

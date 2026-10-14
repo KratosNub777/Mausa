@@ -28,12 +28,12 @@ export function SectionHeader({
       </Reveal>
       <MaskHeading
         id={id}
-        lines={lines}
-        className={`mt-5 font-serif text-h2 ${tone === "dark" ? "glow-titulo" : ""}`}
+        lines={[lines.join(" ")]}
+        className="mt-4 max-w-[22ch] font-serif text-h2"
       />
       {intro && (
         <Reveal delay={0.15}>
-          <p className={`mt-6 max-w-[36rem] text-lead ${tone === "dark" ? "text-humo" : "text-tinta"}`}>
+          <p className={`mt-4 max-w-[36rem] text-lead ${tone === "dark" ? "text-humo" : "text-tinta"}`}>
             {intro}
           </p>
         </Reveal>

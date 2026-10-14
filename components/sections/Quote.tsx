@@ -1,185 +1,141 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence } from "motion/react";
-import * as m from "motion/react-m";
+import { useEffect, useRef, useState } from "react";
+import { useLenis } from "lenis/react";
 import { Container, Section, type SectionSlot } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
-import { Magnetic } from "@/components/ui/Magnetic";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { contacto, linkWhatsApp, textos } from "@/content/site";
+import { trabajos } from "@/data/trabajos";
+import { quoteMessage, validateQuote, type QuoteDraft, type QuoteErrors } from "@/lib/quote";
 
 const t = textos.presupuesto;
-const EASE = [0.16, 1, 0.3, 1] as const;
+const espacios = { cocinas: "Cocina", oficinas: "Oficina", salones: "Salón / living", placares: "Placard / vestidor", otros: "Otro" };
 
-/* Formulario que NO usa servidor: arma el texto y abre WhatsApp
-   (wa.me) con el mensaje ya escrito, listo para enviar. */
 export function Quote({ from, n }: SectionSlot) {
-  const [enviado, setEnviado] = useState(false);
-  const [error, setError] = useState("");
+  const [draft, setDraft] = useState<QuoteDraft>({ nombre: "", espacio: "", medidas: "", mensaje: "", proyecto: "" });
+  const [numero, setNumero] = useState<string>(contacto.whatsapp[0].wa);
+  const [errors, setErrors] = useState<QuoteErrors>({});
+  const [preparedUrl, setPreparedUrl] = useState("");
+  const projectRef = useRef<HTMLInputElement>(null);
+  const lenis = useLenis();
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const d = new FormData(e.currentTarget);
-    const nombre = String(d.get("nombre") ?? "").trim();
-    const espacio = String(d.get("espacio") ?? "");
-    const medidas = String(d.get("medidas") ?? "").trim();
-    const mensaje = String(d.get("mensaje") ?? "").trim();
+  useEffect(() => {
+    let frame = 0;
+    const selectProject = (event: Event) => {
+      const id = (event as CustomEvent<string>).detail;
+      const project = trabajos.find((p) => p.id === id);
+      if (!project) return;
+      setDraft((current) => ({ ...current,
+        proyecto: `${project.titulo}${project.render ? " (Diseño 3D)" : ""}`,
+        espacio: current.espacio || espacios[project.espacio],
+      }));
+      setPreparedUrl("");
+      setErrors((current) => ({ ...current, espacio: undefined }));
+      frame = requestAnimationFrame(() => {
+        if (lenis) { lenis.start(); lenis.scrollTo("#presupuesto"); }
+        else document.getElementById("presupuesto")?.scrollIntoView();
+        history.replaceState(null, "", "#presupuesto");
+        projectRef.current?.focus({ preventScroll: true });
+      });
+    };
+    window.addEventListener("mausa:select-project", selectProject);
+    return () => { window.removeEventListener("mausa:select-project", selectProject); cancelAnimationFrame(frame); };
+  }, [lenis]);
 
-    if (!nombre || !espacio) {
-      setError("Completá tu nombre y el tipo de espacio para continuar.");
-      const campo = e.currentTarget.elements.namedItem(!nombre ? "nombre" : "espacio");
-      (campo as HTMLElement | null)?.focus();
-      return;
-    }
-    setError("");
-
-    const lineas = [
-      "¡Hola, Mausa Mobiliarios! Quiero pedir un presupuesto.",
-      "",
-      `• Nombre: ${nombre}`,
-      `• Espacio: ${espacio}`,
-    ];
-    if (medidas) lineas.push(`• Medidas aproximadas: ${medidas}`);
-    if (mensaje) lineas.push(`• Mensaje: ${mensaje}`);
-    const texto = lineas.join("\n");
-
-    window.open(linkWhatsApp(texto), "_blank", "noopener,noreferrer");
-    setEnviado(true);
-    window.setTimeout(() => setEnviado(false), 6000);
+  function update(key: keyof QuoteDraft, value: string) {
+    setDraft((current) => ({ ...current, [key]: value }));
+    setPreparedUrl("");
+    if (key === "nombre" || key === "espacio") setErrors((current) => ({ ...current, [key]: undefined }));
   }
 
-  const field =
-    "mt-2 block w-full rounded-xl border border-negro/20 bg-beige/70 px-4 py-3.5 text-base text-negro placeholder:text-tinta/70 transition-[border-color,background-color] duration-300 focus:border-negro focus:bg-beige focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negro";
-  const label = "text-sm font-semibold";
+  function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const nextErrors = validateQuote(draft);
+    setErrors(nextErrors);
+    setPreparedUrl("");
+    const first = nextErrors.nombre ? "nombre" : nextErrors.espacio ? "espacio" : null;
+    if (first) {
+      (e.currentTarget.elements.namedItem(first) as HTMLElement | null)?.focus();
+      return;
+    }
+    const url = linkWhatsApp(quoteMessage(draft), numero);
+    window.open(url, "_blank", "noopener,noreferrer");
+    setPreparedUrl(url);
+  }
 
+  const field = "mt-1.5 block min-h-11 w-full min-w-0 rounded-xl border border-negro/25 bg-beige px-3 py-3 text-base text-negro placeholder:text-tinta focus:border-negro focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negro aria-invalid:border-[#8a2c1d]";
+  const label = "text-sm font-semibold";
   return (
     <Section id="presupuesto" tone="light" from={from} labelledBy="presupuesto-titulo">
-      <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+      <Container className="grid gap-5 lg:grid-cols-12 lg:gap-x-12">
         <div className="lg:col-span-5">
           <SectionHeader id="presupuesto-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} intro={t.intro} />
-
-          <RevealGroup as="ol" className="mt-10 space-y-4">
-            {t.pasos.map((p, i) => (
-              <RevealItem as="li" key={p} className="flex items-baseline gap-4">
-                <span className="font-serif text-lg text-tinta">{String(i + 1).padStart(2, "0")}</span>
-                <span className="border-b border-negro/10 pb-4 flex-1">{p}</span>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-
-          <Reveal delay={0.2}>
-            <p className="mt-10 text-sm text-tinta">¿Preferís escribir directo?</p>
-            <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-              {contacto.whatsapp.map((w) => (
-                <li key={w.wa}>
-                  <a
-                    href={linkWhatsApp(undefined, w.wa)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center gap-2 font-semibold underline decoration-bronce decoration-1 underline-offset-[6px] transition-colors hover:decoration-negro"
-                  >
-                    <WhatsAppIcon className="size-4" />
-                    {w.numero}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          <p id="presupuesto-flujo" className="mt-3 max-w-[40ch] text-sm leading-relaxed text-tinta">
+            Completá el formulario, revisá el mensaje en WhatsApp y envialo allí para iniciar la consulta.
+          </p>
         </div>
-
-        <Reveal delay={0.1} y={40} className="lg:col-span-6 lg:col-start-7">
-          <form
-            onSubmit={onSubmit}
-            noValidate
-            className="rounded-[1.75rem] border border-negro/10 bg-beige/60 p-5 shadow-[0_40px_80px_-50px_rgb(15_14_13/0.45)] backdrop-blur-sm sm:p-9"
-          >
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <label htmlFor="f-nombre" className={label}>
-                  Nombre <span aria-hidden>*</span>
-                </label>
-                <input id="f-nombre" name="nombre" required autoComplete="name" placeholder="Tu nombre" className={field} />
-              </div>
-              <div>
-                <label htmlFor="f-espacio" className={label}>
-                  Tipo de espacio <span aria-hidden>*</span>
-                </label>
-                <select id="f-espacio" name="espacio" required defaultValue="" className={`${field} appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22%231c1a18%22%20stroke-width=%221.6%22%3E%3Cpath%20d=%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')] bg-[length:1.1rem] bg-[position:right_1rem_center] bg-no-repeat pr-10`}>
-                  <option value="" disabled>
-                    Elegí una opción
-                  </option>
-                  {t.espacios.map((e) => (
-                    <option key={e}>{e}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="f-medidas" className={label}>
-                  Medidas aproximadas
-                </label>
-                <input id="f-medidas" name="medidas" placeholder="Ej: 3 m x 2,40 m" className={field} />
-              </div>
-              <div className="sm:col-span-2">
-                <label htmlFor="f-mensaje" className={label}>
-                  Mensaje
-                </label>
-                <textarea
-                  id="f-mensaje"
-                  name="mensaje"
-                  rows={4}
-                  placeholder="Contanos qué te imaginás: estilo, colores, materiales…"
-                  className={`${field} resize-y`}
-                />
-              </div>
+        <form onSubmit={submit} noValidate aria-describedby="presupuesto-flujo"
+          className="min-w-0 rounded-2xl border border-negro/15 bg-arena/25 p-4 sm:p-6 lg:col-span-6 lg:col-start-7 lg:row-span-2">
+          <p className="mb-4 text-sm text-tinta">Nombre y tipo de espacio son obligatorios. Los demás datos son opcionales.</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <label htmlFor="f-nombre" className={label}>Nombre (obligatorio)</label>
+              <input id="f-nombre" name="nombre" required autoComplete="name" value={draft.nombre} onChange={(e) => update("nombre", e.target.value)}
+                aria-invalid={!!errors.nombre} aria-describedby={`nombre-ayuda${errors.nombre ? " nombre-error" : ""}`} className={field} />
+              <p id="nombre-ayuda" className="mt-1.5 text-sm text-tinta">Como querés que te llamemos.</p>
+              {errors.nombre && <p id="nombre-error" className="mt-1 text-sm font-semibold text-[#8a2c1d]">{errors.nombre}</p>}
             </div>
-
-            <div aria-live="polite" className="min-h-6 pt-3 text-sm">
-              {error && <p className="font-semibold text-[#8a2c1d]">{error}</p>}
+            <div>
+              <label htmlFor="f-espacio" className={label}>Tipo de espacio (obligatorio)</label>
+              <select id="f-espacio" name="espacio" required value={draft.espacio} onChange={(e) => update("espacio", e.target.value)}
+                aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={field}>
+                <option value="" disabled>Elegí una opción</option>
+                {t.espacios.map((e) => <option key={e}>{e}</option>)}
+              </select>
+              {errors.espacio && <p id="espacio-error" className="mt-1 text-sm font-semibold text-[#8a2c1d]">{errors.espacio}</p>}
             </div>
-
-            <div className="mt-2 flex flex-col items-stretch gap-4 border-t border-negro/10 pt-6 sm:flex-row sm:items-center sm:gap-6">
-              <Magnetic className="w-full shrink-0 sm:w-auto">
-                <button
-                  type="submit"
-                  className="inline-flex min-h-14 w-full min-w-[16rem] items-center justify-center gap-2.5 rounded-full bg-negro px-8 font-semibold whitespace-nowrap text-beige transition-colors duration-300 hover:bg-negro-suave sm:w-auto"
-                >
-                  <WhatsAppIcon className="size-5 shrink-0" />
-                  Enviar por WhatsApp
-                </button>
-              </Magnetic>
-              <p className="text-center text-sm leading-snug text-tinta sm:text-left">
-                Sin compromiso.
-                <br className="hidden sm:block" /> Te respondemos por WhatsApp.
-              </p>
+            <div>
+              <label htmlFor="f-medidas" className={label}>Medidas (opcional)</label>
+              <input id="f-medidas" name="medidas" value={draft.medidas} onChange={(e) => update("medidas", e.target.value)} aria-describedby="medidas-ayuda" placeholder="Ej: 3 m × 2,40 m" className={field} />
+              <p id="medidas-ayuda" className="mt-1.5 text-sm text-tinta">Una medida aproximada alcanza.</p>
             </div>
-
-            {/* Confirmación de la acción */}
-            <AnimatePresence>
-              {enviado && (
-                <m.p
-                  role="status"
-                  className="mt-5 flex items-center gap-3 rounded-xl bg-negro px-4 py-3 text-sm text-beige"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.5, ease: EASE }}
-                >
-                  <svg viewBox="0 0 24 24" className="size-5 shrink-0 text-bronce" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
-                    <m.path
-                      d="M5 12.5l4.5 4.5L19 7.5"
-                      initial={{ pathLength: 0 }}
-                      animate={{ pathLength: 1 }}
-                      transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
-                    />
-                  </svg>
-                  Listo: se abrió WhatsApp con tu mensaje. Solo falta tocar “Enviar”.
-                </m.p>
-              )}
-            </AnimatePresence>
-          </form>
-        </Reveal>
+            <div className="sm:col-span-2">
+              <label htmlFor="f-proyecto" className={label}>Proyecto de referencia (opcional)</label>
+              <input ref={projectRef} id="f-proyecto" name="proyecto" value={draft.proyecto} onChange={(e) => update("proyecto", e.target.value)} aria-describedby="proyecto-ayuda" placeholder="Ej: Sala de reuniones" className={field} />
+              <p id="proyecto-ayuda" className="mt-1.5 text-sm text-tinta">Podés editarlo o borrarlo. Tu mensaje se conserva al elegir un proyecto.</p>
+            </div>
+            <div className="sm:col-span-2">
+              <label htmlFor="f-mensaje" className={label}>Mensaje (opcional)</label>
+              <textarea id="f-mensaje" name="mensaje" rows={3} value={draft.mensaje} onChange={(e) => update("mensaje", e.target.value)} aria-describedby="mensaje-ayuda"
+                placeholder="Contanos qué te imaginás…" className={`${field} resize-y`} />
+              <p id="mensaje-ayuda" className="mt-1.5 text-sm text-tinta">Podés incluir estilo, colores o necesidades de guardado.</p>
+            </div>
+            <div className="sm:col-span-2">
+              <label htmlFor="f-contacto" className={label}>Contacto de WhatsApp</label>
+              <select id="f-contacto" name="contacto" value={numero} onChange={(e) => { setNumero(e.target.value); setPreparedUrl(""); }} className={`${field} text-sm`}>
+                {contacto.whatsapp.map((w) => <option key={w.wa} value={w.wa}>{w.etiqueta} · {w.numero}</option>)}
+              </select>
+            </div>
+          </div>
+          <div aria-live="polite" className="sr-only">{Object.keys(errors).some((k) => errors[k as keyof QuoteErrors]) && "Revisá los campos indicados para continuar."}</div>
+          <button type="submit" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-negro px-3 text-sm font-semibold text-beige hover:bg-negro-suave sm:text-base">
+            <WhatsAppIcon className="size-5 shrink-0" />Continuar en WhatsApp
+          </button>
+          <p className="mt-2 text-sm leading-relaxed text-tinta">El formulario prepara el mensaje. La consulta se envía cuando tocás “Enviar” en WhatsApp.</p>
+          {preparedUrl && <div role="status" className="mt-4 rounded-xl border border-negro/20 bg-beige p-3 text-sm leading-relaxed">
+            <p>Mensaje preparado. Revisalo y envialo en WhatsApp para completar la consulta.</p>
+            <a href={preparedUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center font-semibold underline underline-offset-4">Abrir el mensaje en WhatsApp</a>
+          </div>}
+        </form>
+        <div className="lg:col-span-5 lg:row-start-2 lg:self-start">
+          <p className="text-sm text-tinta">¿Preferís consultar directamente?</p>
+          <ul className="mt-2 space-y-1">{contacto.whatsapp.map((w, i) => <li key={w.wa}>
+            <a href={linkWhatsApp(undefined, w.wa)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 flex-wrap items-center gap-x-2 text-sm underline underline-offset-4">
+              <WhatsAppIcon className="size-4 shrink-0" /><span className={i === 0 ? "font-semibold" : "text-tinta"}>Consultar por WhatsApp · {i === 0 ? "principal" : "alternativo"}</span><span>{w.numero}</span>
+            </a>
+          </li>)}</ul>
+        </div>
       </Container>
     </Section>
   );

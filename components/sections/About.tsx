@@ -3,11 +3,11 @@ import { Container, Section, type SectionSlot } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ImageReveal, Reveal } from "@/components/ui/Reveal";
 import { Parallax } from "@/components/ui/Parallax";
-import { textos } from "@/content/site";
+import { informacionComercial, textos } from "@/content/site";
 
 const t = textos.nosotros;
 
-/* Quiénes somos: historia breve y el único dato duro que tenemos (1 año). */
+/* Acompañamiento del proyecto; antigüedad solo con un año de inicio confirmado. */
 export function About({ from, n }: SectionSlot) {
   return (
     <Section id="nosotros" tone="dark" from={from} labelledBy="nosotros-titulo">
@@ -23,12 +23,14 @@ export function About({ from, n }: SectionSlot) {
             ))}
           </div>
 
-          <Reveal delay={0.1} className="mt-10 flex items-end gap-5 border-t border-bronce/30 pt-6">
-            <span className="font-serif text-[clamp(4.5rem,3.5rem+4vw,7rem)] leading-[0.8]">{t.dato.numero}</span>
-            <span className="pb-1.5">
-              <span className="block text-lg font-semibold">{t.dato.texto}</span>
-              <span className="block text-humo">{t.dato.detalle}</span>
-            </span>
+          <Reveal className="mt-6 border-t border-bronce/30 pt-5">
+            <p className="font-semibold">{t.acompanamiento}</p>
+            {informacionComercial.anioInicio !== null && (
+              <p className="mt-2 text-sm text-humo">Desde {informacionComercial.anioInicio}.</p>
+            )}
+            {informacionComercial.tallerEquipo && (
+              <p className="mt-3 text-humo">{informacionComercial.tallerEquipo}</p>
+            )}
           </Reveal>
         </div>
 

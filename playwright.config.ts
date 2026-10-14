@@ -6,7 +6,7 @@ export default defineConfig({
   workers: 2,
   timeout: 30_000,
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: "http://localhost:3000",
     browserName: "chromium",
     launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, args: ["--no-sandbox"] },
     screenshot: "only-on-failure",
@@ -14,7 +14,7 @@ export default defineConfig({
   },
   webServer: {
     command: "npm run start -- --hostname 127.0.0.1",
-    url: "http://127.0.0.1:3000",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
   },

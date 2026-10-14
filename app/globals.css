@@ -181,16 +181,14 @@ dialog::backdrop {
 }
 .hero-line > span {
   display: inline-block;
-  animation: rise 1.1s var(--ease-out-expo) both;
-  animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+  animation: rise 0.45s var(--ease-out-expo) both;
 }
 .hero-fade {
-  animation: fade-up 1s var(--ease-out-expo) both;
-  animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+  animation: fade-up 0.45s var(--ease-out-expo) both;
 }
 /* La foto principal no arranca invisible (es el LCP): solo se "asienta" */
 .hero-img {
-  animation: settle 1.6s var(--ease-out-expo) both;
+  animation: settle 0.6s var(--ease-out-expo) both;
 }
 @keyframes settle {
   from {
@@ -199,13 +197,13 @@ dialog::backdrop {
 }
 @keyframes rise {
   from {
-    transform: translate3d(0, 105%, 0);
+    transform: translate3d(0, 8px, 0);
   }
 }
 @keyframes fade-up {
   from {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0);
+    opacity: 0.85;
+    transform: translate3d(0, 8px, 0);
   }
 }
 

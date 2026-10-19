@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import { Container, Section, type SectionSlot } from "@/components/ui/Section";
@@ -76,6 +77,12 @@ export function Quote({ from, n }: SectionSlot) {
             <p id="presupuesto-flujo" className="mt-5 max-w-[38ch] text-sm leading-relaxed text-humo">
               Completá tu idea. Abriremos WhatsApp con el mensaje listo para que lo revises y envíes.
             </p>
+            <figure className="my-8 hidden lg:block">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
+                <Image src="/trabajos/cocinas/terminacion-madera-clara.jpg" alt="" fill sizes="(min-width: 1024px) 34vw, 1px" className="object-cover" />
+              </div>
+              <figcaption className="mt-3 flex items-center gap-3 text-xs tracking-[0.16em] text-humo uppercase"><span aria-hidden className="h-px w-6 bg-bronce" />Diseño · Fabricación · Instalación</figcaption>
+            </figure>
             <div className="mt-7 border-t border-beige/15 pt-5 lg:mt-auto">
               <p className="text-sm text-humo">¿Preferís conversar directamente?</p>
               <ul className="mt-2 space-y-2">

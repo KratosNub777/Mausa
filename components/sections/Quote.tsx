@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import { Container, Section, type SectionSlot } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { WhatsAppIcon } from "@/components/ui/Icons";
+import { ArrowUpRightIcon, WhatsAppIcon } from "@/components/ui/Icons";
 import { contacto, linkWhatsApp, textos } from "@/content/site";
 import { trabajos } from "@/data/trabajos";
 import { quoteMessage, validateQuote, type QuoteDraft, type QuoteErrors } from "@/lib/quote";
@@ -68,73 +68,89 @@ export function Quote({ from, n }: SectionSlot) {
   const label = "block text-sm font-semibold";
   return (
     <Section id="presupuesto" tone="light" from={from} labelledBy="presupuesto-titulo">
-      <Container className="grid gap-5 lg:grid-cols-12 lg:gap-x-12">
-        <div className="lg:col-span-5">
-          <SectionHeader id="presupuesto-titulo" n={n} tone="light" eyebrow={t.eyebrow} lines={t.titulo} intro={t.intro} />
-          <p id="presupuesto-flujo" className="mt-3 max-w-[40ch] text-sm leading-relaxed text-tinta">
-            Completá el formulario, revisá el mensaje en WhatsApp y envialo allí para iniciar la consulta.
-          </p>
-        </div>
-        <form onSubmit={submit} noValidate aria-describedby="presupuesto-flujo"
-          className="min-w-0 rounded-2xl border border-negro/15 bg-arena/25 p-4 sm:p-6 lg:col-span-6 lg:col-start-7 lg:row-span-2">
-          <p className="mb-4 text-sm text-tinta">Nombre y tipo de espacio son obligatorios. Los demás datos son opcionales.</p>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <label htmlFor="f-nombre" className={label}>Nombre (obligatorio)</label>
-              <input id="f-nombre" name="nombre" required autoComplete="name" value={draft.nombre} onChange={(e) => update("nombre", e.target.value)}
-                aria-invalid={!!errors.nombre} aria-describedby={`nombre-ayuda${errors.nombre ? " nombre-error" : ""}`} className={field} />
-              <p id="nombre-ayuda" className="mt-1.5 text-sm text-tinta">Como querés que te llamemos.</p>
-              {errors.nombre && <p id="nombre-error" className="mt-1 text-sm font-semibold text-[#8a2c1d]">{errors.nombre}</p>}
+      <Container>
+        <div className="grid overflow-hidden rounded-2xl border border-negro/15 bg-[#faf6ef] shadow-[0_24px_64px_-40px_rgba(15,14,13,0.4)] lg:grid-cols-12">
+          <div data-tone="dark" className="relative flex flex-col bg-negro-suave p-6 text-beige sm:p-9 lg:col-span-5 lg:p-10">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-bronce" />
+            <SectionHeader id="presupuesto-titulo" n={n} tone="dark" eyebrow={t.eyebrow} lines={["Tu próximo mueble empieza acá."]} intro={t.intro} />
+            <p id="presupuesto-flujo" className="mt-5 max-w-[38ch] text-sm leading-relaxed text-humo">
+              Completá tu idea. Abriremos WhatsApp con el mensaje listo para que lo revises y envíes.
+            </p>
+            <div className="mt-7 border-t border-beige/15 pt-5 lg:mt-auto">
+              <p className="text-sm text-humo">¿Preferís conversar directamente?</p>
+              <ul className="mt-2 space-y-2">
+                {contacto.whatsapp.map((w) => <li key={w.wa}>
+                  <a href={linkWhatsApp(undefined, w.wa)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 flex-wrap items-center gap-3 text-sm font-semibold hover:text-bronce-claro">
+                    <WhatsAppIcon className="size-5 shrink-0" /><span><span className="block text-xs font-normal text-humo">{w.etiqueta}</span>{w.numero}</span><ArrowUpRightIcon className="size-4" />
+                  </a>
+                </li>)}
+              </ul>
             </div>
-            <div>
-              <label htmlFor="f-espacio" className={label}>Tipo de espacio (obligatorio)</label>
-              <select id="f-espacio" name="espacio" required value={draft.espacio} onChange={(e) => update("espacio", e.target.value)}
-                aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={field}>
-                <option value="" disabled>Elegí una opción</option>
-                {t.espacios.map((e) => <option key={e}>{e}</option>)}
-              </select>
-              {errors.espacio && <p id="espacio-error" className="mt-1 text-sm font-semibold text-[#8a2c1d]">{errors.espacio}</p>}
+          </div>
+          <form onSubmit={submit} noValidate aria-describedby="presupuesto-flujo" className="min-w-0 p-5 sm:p-9 lg:col-span-7 lg:p-10">
+            <div className="mb-7 border-b border-negro/15 pb-5">
+              <h3 className="font-serif text-3xl sm:text-4xl">Hagamos lugar a tu idea.</h3>
+              <p className="mt-2 text-sm leading-relaxed text-tinta">Contanos lo esencial. Los detalles los vemos juntos.</p>
             </div>
-            <div>
-              <label htmlFor="f-medidas" className={label}>Medidas (opcional)</label>
-              <input id="f-medidas" name="medidas" value={draft.medidas} onChange={(e) => update("medidas", e.target.value)} aria-describedby="medidas-ayuda" placeholder="Ej: 3 m × 2,40 m" className={field} />
-              <p id="medidas-ayuda" className="mt-1.5 text-sm text-tinta">Una medida aproximada alcanza.</p>
-            </div>
-            <div className="sm:col-span-2">
-              <label htmlFor="f-proyecto" className={label}>Proyecto de referencia (opcional)</label>
-              <input ref={projectRef} id="f-proyecto" name="proyecto" value={draft.proyecto} onChange={(e) => update("proyecto", e.target.value)} aria-describedby="proyecto-ayuda" placeholder="Ej: Sala de reuniones" className={field} />
-              <p id="proyecto-ayuda" className="mt-1.5 text-sm text-tinta">Podés editarlo o borrarlo. Tu mensaje se conserva al elegir un proyecto.</p>
-            </div>
-            <div className="sm:col-span-2">
-              <label htmlFor="f-mensaje" className={label}>Mensaje (opcional)</label>
-              <textarea id="f-mensaje" name="mensaje" rows={3} value={draft.mensaje} onChange={(e) => update("mensaje", e.target.value)} aria-describedby="mensaje-ayuda"
-                placeholder="Contanos qué te imaginás…" className={`${field} resize-y`} />
-              <p id="mensaje-ayuda" className="mt-1.5 text-sm text-tinta">Podés incluir estilo, colores o necesidades de guardado.</p>
-            </div>
-            <div className="sm:col-span-2">
+            <fieldset className="min-w-0">
+              <legend className="mb-5 flex items-center gap-3 text-sm font-semibold"><span aria-hidden className="grid size-7 place-items-center rounded-full border border-negro/20 text-xs text-tinta">01</span>Tu espacio, tu proyecto</legend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="f-nombre" className={label}>Tu nombre <span className="text-tinta">*</span></label>
+                  <input id="f-nombre" name="nombre" required autoComplete="name" placeholder="¿Cómo te llamás?" value={draft.nombre} onChange={(e) => update("nombre", e.target.value)}
+                    aria-invalid={!!errors.nombre} aria-describedby={errors.nombre ? "nombre-error" : undefined} className={field} />
+                  {errors.nombre && <p id="nombre-error" className="mt-2 text-sm font-semibold text-[#8a2c1d]">{errors.nombre}</p>}
+                </div>
+                <div>
+                  <label htmlFor="f-espacio" className={label}>Tipo de espacio <span className="text-tinta">*</span></label>
+                  <select id="f-espacio" name="espacio" required value={draft.espacio} onChange={(e) => update("espacio", e.target.value)}
+                    aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={field}>
+                    <option value="" disabled>Elegí tu espacio</option>
+                    {t.espacios.map((e) => <option key={e}>{e}</option>)}
+                  </select>
+                  {errors.espacio && <p id="espacio-error" className="mt-2 text-sm font-semibold text-[#8a2c1d]">{errors.espacio}</p>}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset className="mt-8 min-w-0">
+              <legend className="mb-5 flex items-center gap-3 text-sm font-semibold"><span aria-hidden className="grid size-7 place-items-center rounded-full border border-negro/20 text-xs text-tinta">02</span>Los primeros detalles</legend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="f-medidas" className={label}>Medidas <span className="font-normal text-tinta">(opcional)</span></label>
+                  <input id="f-medidas" name="medidas" value={draft.medidas} onChange={(e) => update("medidas", e.target.value)} aria-describedby="medidas-ayuda" placeholder="Ej: 3 m × 2,40 m" className={field} />
+                  <p id="medidas-ayuda" className="mt-2 text-xs leading-relaxed text-tinta">Si no las sabés, te ayudamos a medir.</p>
+                </div>
+                <div>
+                  <label htmlFor="f-proyecto" className={label}>Referencia <span className="font-normal text-tinta">(opcional)</span></label>
+                  <input ref={projectRef} id="f-proyecto" name="proyecto" value={draft.proyecto} onChange={(e) => update("proyecto", e.target.value)} aria-describedby="proyecto-ayuda" placeholder="Un trabajo que te gustó" className={field} />
+                  <p id="proyecto-ayuda" className="mt-2 text-xs leading-relaxed text-tinta">Elegí de la galería o escribí tu referencia.</p>
+                </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="f-mensaje" className={label}>¿Qué tenés en mente? <span className="font-normal text-tinta">(opcional)</span></label>
+                  <textarea id="f-mensaje" name="mensaje" rows={4} value={draft.mensaje} onChange={(e) => update("mensaje", e.target.value)}
+                    placeholder="Estilo, colores, qué necesitás guardar…" className={`${field} resize-y`} />
+                </div>
+              </div>
+            </fieldset>
+            <div className="mt-6">
               <label htmlFor="f-contacto" className={label}>Contacto de WhatsApp</label>
               <select id="f-contacto" name="contacto" value={numero} onChange={(e) => { setNumero(e.target.value); setPreparedUrl(""); }} className={`${field} text-sm`}>
                 {contacto.whatsapp.map((w) => <option key={w.wa} value={w.wa}>{w.etiqueta} · {w.numero}</option>)}
               </select>
             </div>
-          </div>
-          <div aria-live="polite" className="sr-only">{Object.keys(errors).some((k) => errors[k as keyof QuoteErrors]) && "Revisá los campos indicados para continuar."}</div>
-          <button type="submit" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-negro px-3 text-sm font-semibold text-beige hover:bg-negro-suave sm:text-base">
-            <WhatsAppIcon className="size-5 shrink-0" />Continuar en WhatsApp
-          </button>
-          <p className="mt-2 text-sm leading-relaxed text-tinta">El formulario prepara el mensaje. La consulta se envía cuando tocás “Enviar” en WhatsApp.</p>
-          {preparedUrl && <div role="status" className="mt-4 rounded-xl border border-negro/20 bg-beige p-3 text-sm leading-relaxed">
-            <p>Mensaje preparado. Revisalo y envialo en WhatsApp para completar la consulta.</p>
-            <a href={preparedUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center font-semibold underline underline-offset-4">Abrir el mensaje en WhatsApp</a>
-          </div>}
-        </form>
-        <div className="lg:col-span-5 lg:row-start-2 lg:self-start">
-          <p className="text-sm text-tinta">¿Preferís consultar directamente?</p>
-          <ul className="mt-2 space-y-1">{contacto.whatsapp.map((w, i) => <li key={w.wa}>
-            <a href={linkWhatsApp(undefined, w.wa)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 flex-wrap items-center gap-x-2 text-sm underline underline-offset-4">
-              <WhatsAppIcon className="size-4 shrink-0" /><span className={i === 0 ? "font-semibold" : "text-tinta"}>Consultar por WhatsApp · {i === 0 ? "principal" : "alternativo"}</span><span>{w.numero}</span>
-            </a>
-          </li>)}</ul>
+            <div aria-live="polite" className="sr-only">{Object.keys(errors).some((k) => errors[k as keyof QuoteErrors]) && "Revisá los campos indicados para continuar."}</div>
+            <div className="mt-7 border-t border-negro/15 pt-5">
+              <p className="mb-4 text-xs text-tinta">* Nombre y tipo de espacio son obligatorios.</p>
+              <button type="submit" className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-lg bg-negro px-4 py-4 text-sm font-semibold text-beige transition-colors hover:bg-negro-suave sm:text-base">
+                <WhatsAppIcon className="size-5 shrink-0" />Continuar en WhatsApp<ArrowUpRightIcon className="ml-auto size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+              <p className="mt-3 text-center text-xs leading-relaxed text-tinta">Revisá el mensaje y tocá “Enviar” en WhatsApp para completar tu consulta.</p>
+            </div>
+            {preparedUrl && <div role="status" className="mt-4 rounded-lg border border-negro/20 bg-beige p-4 text-sm leading-relaxed">
+              <p>Mensaje preparado. Revisalo y envialo en WhatsApp para completar la consulta.</p>
+              <a href={preparedUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center font-semibold underline underline-offset-4">Abrir el mensaje en WhatsApp</a>
+            </div>}
+          </form>
         </div>
       </Container>
     </Section>

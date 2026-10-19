@@ -111,7 +111,7 @@ export function Quote({ from, n }: SectionSlot) {
                 <div>
                   <label htmlFor="f-espacio" className={label}>Tipo de espacio <span className="text-tinta">*</span></label>
                   <select id="f-espacio" name="espacio" required value={draft.espacio} onChange={(e) => update("espacio", e.target.value)}
-                    aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={field}>
+                    aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={`${field} quote-select`}>
                     <option value="" disabled>Elegí tu espacio</option>
                     {t.espacios.map((e) => <option key={e}>{e}</option>)}
                   </select>

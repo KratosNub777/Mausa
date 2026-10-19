@@ -118,9 +118,9 @@ export function Quote({ from, n }: SectionSlot) {
               <legend className="mb-5 flex items-center gap-3 text-sm font-semibold"><span aria-hidden className="grid size-7 place-items-center rounded-full border border-negro/20 text-xs text-tinta">02</span>Los primeros detalles</legend>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="f-medidas" className={label}>Medidas <span className="font-normal text-tinta">(opcional)</span></label>
-                  <input id="f-medidas" name="medidas" value={draft.medidas} onChange={(e) => update("medidas", e.target.value)} aria-describedby="medidas-ayuda" placeholder="Ej: 3 m × 2,40 m" className={field} />
-                  <p id="medidas-ayuda" className="mt-2 text-xs leading-relaxed text-tinta">Si no las sabés, te ayudamos a medir.</p>
+                  <label htmlFor="f-medidas" className={label}>Medidas en cm <span className="font-normal text-tinta">(opcional)</span></label>
+                  <input id="f-medidas" name="medidas" value={draft.medidas} onChange={(e) => update("medidas", e.target.value)} aria-describedby="medidas-ayuda" placeholder="Ej: 300 × 240 cm" className={field} />
+                  <p id="medidas-ayuda" className="mt-2 text-xs leading-relaxed text-tinta">Usá centímetros. Si no las sabés, te ayudamos a medir.</p>
                 </div>
                 <div>
                   <label htmlFor="f-proyecto" className={label}>Referencia <span className="font-normal text-tinta">(opcional)</span></label>

@@ -87,7 +87,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     test("referencia de proyecto es editable y no borra el borrador", async ({ page }) => {
       await page.locator("#f-nombre").fill("Facundo");
       await page.locator("#f-mensaje").fill("Necesito guardado para libros.");
-      await page.locator("#f-medidas").fill("3 m × 2,40 m");
+      await page.locator("#f-medidas").fill("300 × 240 cm");
       await page.locator("#f-espacio").selectOption("Placard / vestidor");
       await page.locator("#galeria-trabajos li button").first().click();
       await page.getByRole("dialog").getByRole("button", { name: "Quiero algo similar" }).click();
@@ -96,7 +96,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       await expect(page.locator("#f-proyecto")).toHaveValue("Escritorio directorio");
       await expect(page.locator("#f-mensaje")).toHaveValue("Necesito guardado para libros.");
       await expect(page.locator("#f-nombre")).toHaveValue("Facundo");
-      await expect(page.locator("#f-medidas")).toHaveValue("3 m × 2,40 m");
+      await expect(page.locator("#f-medidas")).toHaveValue("300 × 240 cm");
       await expect(page.locator("#f-espacio")).toHaveValue("Placard / vestidor");
       await page.locator("#f-proyecto").fill("Escritorio con más estantes");
       await interceptWhatsApp(page);
@@ -104,6 +104,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       const url = new URL(await page.evaluate(() => (window as typeof window & { openedUrl: string }).openedUrl));
       expect(url.pathname).toBe("/595992948128");
       expect(url.searchParams.get("text")).toContain("• Proyecto de referencia: Escritorio con más estantes");
+      expect(url.searchParams.get("text")).toContain("• Medidas aproximadas: 300 × 240 cm");
       expect(url.searchParams.get("text")).toContain("• Mensaje: Necesito guardado para libros.");
       await expect(page.locator("#presupuesto [role=status]")).toContainText("Mensaje preparado");
     });

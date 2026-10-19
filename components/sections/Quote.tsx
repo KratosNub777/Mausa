@@ -15,7 +15,6 @@ const espacios = { cocinas: "Cocina", oficinas: "Oficina", salones: "Salón / li
 
 export function Quote({ from, n }: SectionSlot) {
   const [draft, setDraft] = useState<QuoteDraft>({ nombre: "", espacio: "", medidas: "", mensaje: "", proyecto: "" });
-  const [numero, setNumero] = useState<string>(contacto.whatsapp[0].wa);
   const [errors, setErrors] = useState<QuoteErrors>({});
   const [preparedUrl, setPreparedUrl] = useState("");
   const projectRef = useRef<HTMLInputElement>(null);
@@ -60,7 +59,7 @@ export function Quote({ from, n }: SectionSlot) {
       (e.currentTarget.elements.namedItem(first) as HTMLElement | null)?.focus();
       return;
     }
-    const url = linkWhatsApp(quoteMessage(draft), numero);
+    const url = linkWhatsApp(quoteMessage(draft));
     window.open(url, "_blank", "noopener,noreferrer");
     setPreparedUrl(url);
   }
@@ -85,13 +84,9 @@ export function Quote({ from, n }: SectionSlot) {
             </figure>
             <div className="mt-7 border-t border-beige/15 pt-5 lg:mt-auto">
               <p className="text-sm text-humo">¿Preferís conversar directamente?</p>
-              <ul className="mt-2 space-y-2">
-                {contacto.whatsapp.map((w) => <li key={w.wa}>
-                  <a href={linkWhatsApp(undefined, w.wa)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 flex-wrap items-center gap-3 text-sm font-semibold hover:text-bronce-claro">
-                    <WhatsAppIcon className="size-5 shrink-0" /><span><span className="block text-xs font-normal text-humo">{w.etiqueta}</span>{w.numero}</span><ArrowUpRightIcon className="size-4" />
-                  </a>
-                </li>)}
-              </ul>
+              <a href={linkWhatsApp()} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 flex-wrap items-center gap-3 text-sm font-semibold hover:text-bronce-claro">
+                <WhatsAppIcon className="size-5 shrink-0" /><span>{contacto.whatsapp[0].numero}</span><ArrowUpRightIcon className="size-4" /><span className="sr-only">Consultar por WhatsApp</span>
+              </a>
             </div>
           </div>
           <form onSubmit={submit} noValidate aria-describedby="presupuesto-flujo" className="min-w-0 p-5 sm:p-9 lg:col-span-7 lg:p-10">
@@ -111,7 +106,7 @@ export function Quote({ from, n }: SectionSlot) {
                 <div>
                   <label htmlFor="f-espacio" className={label}>Tipo de espacio <span className="text-tinta">*</span></label>
                   <select id="f-espacio" name="espacio" required value={draft.espacio} onChange={(e) => update("espacio", e.target.value)}
-                    aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={field}>
+                    aria-invalid={!!errors.espacio} aria-describedby={errors.espacio ? "espacio-error" : undefined} className={`${field} quote-select`}>
                     <option value="" disabled>Elegí tu espacio</option>
                     {t.espacios.map((e) => <option key={e}>{e}</option>)}
                   </select>
@@ -139,12 +134,6 @@ export function Quote({ from, n }: SectionSlot) {
                 </div>
               </div>
             </fieldset>
-            <div className="mt-6">
-              <label htmlFor="f-contacto" className={label}>Contacto de WhatsApp</label>
-              <select id="f-contacto" name="contacto" value={numero} onChange={(e) => { setNumero(e.target.value); setPreparedUrl(""); }} className={`${field} text-sm`}>
-                {contacto.whatsapp.map((w) => <option key={w.wa} value={w.wa}>{w.etiqueta} · {w.numero}</option>)}
-              </select>
-            </div>
             <div aria-live="polite" className="sr-only">{Object.keys(errors).some((k) => errors[k as keyof QuoteErrors]) && "Revisá los campos indicados para continuar."}</div>
             <div className="mt-7 border-t border-negro/15 pt-5">
               <p className="mb-4 text-xs text-tinta">* Nombre y tipo de espacio son obligatorios.</p>

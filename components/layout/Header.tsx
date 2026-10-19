@@ -98,11 +98,9 @@ function MobileMenu({ onClose, onNavigate }: {
         <div className="menu-contact mt-auto pt-6">
           <a href="#presupuesto" onClick={(e) => onNavigate(e, "#presupuesto")} className="flex min-h-12 items-center justify-center rounded-full bg-beige px-4 font-semibold text-negro">Pedir presupuesto</a>
           <p className="mt-4 text-sm text-humo">Consulta directa</p>
-          <ul className="mt-2 space-y-1">{contacto.whatsapp.map((w) => <li key={w.wa}>
-            <a href={linkWhatsApp(undefined, w.wa)} target="_blank" rel="noopener noreferrer" className="flex min-h-11 flex-wrap items-center gap-x-2 text-sm underline underline-offset-4">
-              <WhatsAppIcon className="size-4 shrink-0" />{w.etiqueta} · {w.numero}
-            </a>
-          </li>)}</ul>
+          <a href={linkWhatsApp()} target="_blank" rel="noopener noreferrer" className="mt-2 flex min-h-11 flex-wrap items-center gap-x-2 text-sm underline underline-offset-4">
+            <WhatsAppIcon className="size-4 shrink-0" />{contacto.whatsapp[0].etiqueta} · {contacto.whatsapp[0].numero}
+          </a>
         </div>
       </div>
     </dialog>, document.body,

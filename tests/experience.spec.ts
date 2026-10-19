@@ -126,13 +126,14 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       await page.getByRole("button", { name: "Continuar en WhatsApp" }).click();
       await expect(page.locator("#f-espacio")).toBeFocused();
       await page.locator("#f-espacio").selectOption("Cocina");
-      await expect(page.locator("#f-contacto")).toHaveValue("595992948128");
-      await page.locator("#f-contacto").selectOption("595991646993");
+      await expect(page.locator("#f-contacto")).toHaveCount(0);
+      await expect(page.locator('main a[href*="595991646993"]')).toHaveCount(0);
+      await expect(page.locator('footer a[href*="595991646993"]')).toHaveCount(1);
       await expect(page.locator('a[href*="595982170272"]')).toHaveCount(0);
       await page.getByRole("button", { name: "Continuar en WhatsApp" }).click();
       const url = new URL(await page.evaluate(() => (window as typeof window & { openedUrl: string }).openedUrl));
       expect(url.origin).toBe("https://wa.me");
-      expect(url.pathname).toBe("/595991646993");
+      expect(url.pathname).toBe("/595992948128");
       expect(url.searchParams.get("text")).toContain("• Nombre: José Pérez");
       expect(url.searchParams.get("text")).toContain("• Espacio: Cocina");
       expect(url.searchParams.get("text")).toContain("Quiero una cocina clara & práctica.\nCon cajones.");
@@ -147,6 +148,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       await toggle.click();
       const menu = page.getByRole("dialog", { name: "Menú", exact: true });
       await expect(menu).toBeVisible();
+      await expect(menu.locator('a[href*="595991646993"]')).toHaveCount(0);
       await expect(menu.getByRole("button", { name: "Cerrar menú" })).toBeFocused();
       for (let i = 0; i < 12; i++) {
         await page.keyboard.press("Tab");

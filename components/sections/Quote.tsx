@@ -64,8 +64,8 @@ export function Quote({ from, n }: SectionSlot) {
     setPreparedUrl(url);
   }
 
-  const field = "mt-1.5 block min-h-11 w-full min-w-0 rounded-xl border border-negro/25 bg-beige px-3 py-3 text-base text-negro placeholder:text-tinta focus:border-negro focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negro aria-invalid:border-[#8a2c1d]";
-  const label = "text-sm font-semibold";
+  const field = "mt-2 block min-h-13 w-full min-w-0 rounded-lg border border-negro/20 bg-white/55 px-4 py-3.5 text-base text-negro placeholder:text-tinta transition-[border-color,box-shadow] hover:border-bronce focus:border-negro focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-negro aria-invalid:border-[#8a2c1d]";
+  const label = "block text-sm font-semibold";
   return (
     <Section id="presupuesto" tone="light" from={from} labelledBy="presupuesto-titulo">
       <Container className="grid gap-5 lg:grid-cols-12 lg:gap-x-12">

@@ -15,8 +15,8 @@ export const siteUrl =
 
 export const contacto = {
   whatsapp: [
-    { etiqueta: "WhatsApp principal", numero: "+595 982 170272", wa: "595982170272" },
-    { etiqueta: "WhatsApp alternativo", numero: "+595 992 948128", wa: "595992948128" },
+    { etiqueta: "WhatsApp principal", numero: "+595 992 948128", wa: "595992948128" },
+    { etiqueta: "WhatsApp alternativo", numero: "+595 991 646993", wa: "595991646993" },
   ],
   email: "mausamobiliarios@gmail.com",
   instagram: {

@@ -8,18 +8,18 @@ import { Quote } from "@/components/sections/Quote";
 import { Contact } from "@/components/sections/Contact";
 import { JsonLd } from "@/components/JsonLd";
 import type { SectionSlot, Tone } from "@/components/ui/Section";
-import { hayTestimonios } from "@/content/testimonios";
+import { mostrarTestimonios } from "@/content/testimonios";
 
 type Bloque = { key: string; tone: Tone; Comp: (p: SectionSlot) => React.ReactNode };
 
 /* Orden de la página. Cada sección recibe su número (01, 02…).
-   Testimonios aparece solo cuando hay opiniones reales (content/testimonios.ts). */
+   Testimonios muestra opiniones reales o tarjetas pendientes (content/testimonios.ts). */
 const bloques: Bloque[] = [
   { key: "nosotros", tone: "dark", Comp: About },
   { key: "trabajos", tone: "light", Comp: Work },
   { key: "proceso", tone: "dark", Comp: Process },
   { key: "ventajas", tone: "light", Comp: Benefits },
-  ...(hayTestimonios ? [{ key: "testimonios", tone: "dark" as Tone, Comp: Testimonials }] : []),
+  ...(mostrarTestimonios ? [{ key: "testimonios", tone: "dark" as Tone, Comp: Testimonials }] : []),
   { key: "presupuesto", tone: "light", Comp: Quote },
 ];
 

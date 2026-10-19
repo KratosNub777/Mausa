@@ -102,7 +102,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       await interceptWhatsApp(page);
       await page.getByRole("button", { name: "Continuar en WhatsApp" }).click();
       const url = new URL(await page.evaluate(() => (window as typeof window & { openedUrl: string }).openedUrl));
-      expect(url.pathname).toBe("/595982170272");
+      expect(url.pathname).toBe("/595992948128");
       expect(url.searchParams.get("text")).toContain("• Proyecto de referencia: Escritorio con más estantes");
       expect(url.searchParams.get("text")).toContain("• Mensaje: Necesito guardado para libros.");
       await expect(page.locator("#presupuesto [role=status]")).toContainText("Mensaje preparado");
@@ -126,11 +126,13 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       await page.getByRole("button", { name: "Continuar en WhatsApp" }).click();
       await expect(page.locator("#f-espacio")).toBeFocused();
       await page.locator("#f-espacio").selectOption("Cocina");
-      await page.locator("#f-contacto").selectOption("595992948128");
+      await expect(page.locator("#f-contacto")).toHaveValue("595992948128");
+      await page.locator("#f-contacto").selectOption("595991646993");
+      await expect(page.locator('a[href*="595982170272"]')).toHaveCount(0);
       await page.getByRole("button", { name: "Continuar en WhatsApp" }).click();
       const url = new URL(await page.evaluate(() => (window as typeof window & { openedUrl: string }).openedUrl));
       expect(url.origin).toBe("https://wa.me");
-      expect(url.pathname).toBe("/595992948128");
+      expect(url.pathname).toBe("/595991646993");
       expect(url.searchParams.get("text")).toContain("• Nombre: José Pérez");
       expect(url.searchParams.get("text")).toContain("• Espacio: Cocina");
       expect(url.searchParams.get("text")).toContain("Quiero una cocina clara & práctica.\nCon cajones.");
